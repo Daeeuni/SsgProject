@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android= "http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="이용약관"
+        android:background="#ffffff"
+        android:lines="8"
+        android:textSize="20dp"
+        android:layout_margin="5dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        />
+    <CheckBox
+        android:id="@+id/option1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="동의합니다"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="개인정보 취급방침(선택사항)"
+        android:lines="8"
+        android:background="#ffffff"
+        android:layout_gravity="center"
+        android:textSize="20dp"
+        android:layout_margin="5dp"/>
+    <CheckBox
+        android:id="@+id/option2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="동의합니다"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nextbutton"
+        android:onClick="nextButton"
+        android:text="다음"
+
+        />
+
+
+</LinearLayout>
