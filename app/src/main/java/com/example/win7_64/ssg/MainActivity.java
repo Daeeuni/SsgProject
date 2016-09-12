@@ -2,8 +2,12 @@ package com.example.win7_64.ssg;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.util.Linkify;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,9 +25,25 @@ public class MainActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        super.onCreate(savedInstanceState);//액티비티 생성
+        setContentView(R.layout.activity_login);
         ssg_show = (TextView) findViewById(R.id.ssg_num);
+
+        TextView tvEulaLink = (TextView) findViewById(R.id.tvEulaLink);
+
+        String text = "회원가입을 함으로써 쓱싹의 이용약관 및 개인정보 취급방침에 동의합니다.";
+        tvEulaLink.setText(text);
+
+        Linkify.TransformFilter mTransform = new Linkify.TransformFilter(){
+            @Override
+            public String transformUrl(Matcher match, String url){
+                return "";
+            }
+        };
+
+        Pattern pattern = Pattern.compile("이용약관 및 개인정보 취급방침");
+
+        Linkify.addLinks(tvEulaLink, pattern, "http://naver.com", null, mTransform);
 
 
         restClient = new DefaultRestClient<>();
