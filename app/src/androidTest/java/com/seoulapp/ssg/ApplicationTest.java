@@ -1,4 +1,4 @@
-package com.example.win7_64.ssg;
+package com.seoulapp.ssg;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
