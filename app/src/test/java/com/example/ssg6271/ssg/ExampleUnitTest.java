@@ -1,4 +1,4 @@
-package com.example.win7_64.ssg;
+package com.example.ssg6271.ssg;
 
 import org.junit.Test;
 

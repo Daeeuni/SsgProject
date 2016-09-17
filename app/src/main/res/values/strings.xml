@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">Ssg</string>
+    <string name="app_name">쓱싹</string>
+
+    <string name="this_ssuk">이달의 쓱</string>
+    <string name="this_ssac">이달의 싹</string>
+    <string name="ssac_tip">싹팁</string>
+    <string name="join_ssac">싹 참여하기</string>
+
 </resources>

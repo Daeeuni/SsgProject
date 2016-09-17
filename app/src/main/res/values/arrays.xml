@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="menu">
+        <item>User name(받아오기)</item>
+        <item>나의 쓱 제보</item>
+        <item>나의 싹 내역</item>
+        <item>환경설정</item>
+    </string-array>
+</resources>
