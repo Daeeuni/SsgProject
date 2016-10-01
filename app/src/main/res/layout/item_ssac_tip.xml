@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#dd000000"
+    android:paddingLeft="23dp"
+    android:paddingTop="23dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_tip_subject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Hot Pick"
+        android:textColor="@android:color/white"
+        android:textSize="14dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_tip_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="11dp"
+        android:text="벽 낙서 페인트로 지우기"
+        android:textColor="@android:color/white"
+        android:textSize="18dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="150dp"
+        android:background="@android:color/white" />
+
+    <TextView
+        android:id="@+id/tv_tip_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="페인팅 제대로 하는 법"
+        android:textSize="14dp" />
+
+
+</LinearLayout>
