@@ -59,12 +59,20 @@
             android:text="싹 신청하기"
             android:textColor="@android:color/black" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:id="@+id/ll_ssac_join"
+            android:orientation="horizontal"/>
+
+        <!--
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:background="@color/colorPrimary" />
-    </LinearLayout>
+            android:background="@color/colorPrimary" /> -->
 
+    </LinearLayout>
 
 </LinearLayout>
