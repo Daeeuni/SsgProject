@@ -65,5 +65,19 @@
             android:layout_marginBottom="@dimen/activity_vertical_margin" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_ssac_join"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal" />
+
+    <!--
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:background="@color/colorPrimary" /> -->
+
 
 </LinearLayout>
