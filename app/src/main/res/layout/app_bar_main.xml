@@ -33,9 +33,9 @@
             android:id="@+id/vp_ssac_tip"
             android:layout_width="match_parent"
             android:layout_height="133dp"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="11dp"
-            android:paddingRight="11dp"
-            android:layout_marginBottom="@dimen/activity_vertical_margin" />
+            android:paddingRight="11dp" />
 
         <View
             android:layout_width="match_parent"
@@ -44,7 +44,6 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:background="@android:color/black" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -59,11 +58,11 @@
             android:text="싹 신청하기"
             android:textColor="@android:color/black" />
 
-        <ImageView
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcv_volunteer"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:background="@color/colorPrimary" />
+            android:layout_marginBottom="@dimen/activity_vertical_margin" />
     </LinearLayout>
 
 

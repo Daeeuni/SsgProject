@@ -2,9 +2,9 @@
 <resources>
     <color name="colorPrimary">#E5E9FC</color>
     <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorTvBackground">#efe4e4</color>
     <color name="colorAccent">#FF4081</color>
-
-
+    <color name="colorChanged">#e4101e</color>
     <!-- App Primaray TextColors -->
     <color name="app_body_text_1">#35437F</color>
 
