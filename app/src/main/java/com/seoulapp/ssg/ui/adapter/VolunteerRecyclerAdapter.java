@@ -43,9 +43,8 @@ public class VolunteerRecyclerAdapter extends BasicRecyclerAdapter<Volunteer> {
         }
 
         @Override
-        public void onBindView(Volunteer vollunteer) {
-            tvVollunterName.setText(vollunteer.title);
-
+        public void onBindView(Volunteer volunteer) {
+            tvVollunterName.setText(volunteer.getSpot());
         }
     }
 }

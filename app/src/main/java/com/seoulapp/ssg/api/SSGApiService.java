@@ -8,7 +8,10 @@ import retrofit2.http.GET;
 /**
  * Created by win7-64 on 2016-09-10.
  */
-public interface SSGApiService {
+public interface SsgApiService {
     @GET("ssg_cnt")
     Call<Model> getSsgCount();
+
+    @GET("maindata")
+    Call<Model> getMainViewData();
 }

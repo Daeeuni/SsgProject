@@ -16,8 +16,7 @@ import android.widget.Toast;
 
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.VolunteerApiService;
-import com.seoulapp.ssg.model.Model;
-import com.seoulapp.ssg.model.Users;
+import com.seoulapp.ssg.model.User;
 import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.adapter.VolunteerPagerAdapter;
 
@@ -29,7 +28,7 @@ import retrofit2.Response;
  * Created by Boram Moon on 2016-10-05.
  */
 public class VolunteerActivity extends AppCompatActivity {
-
+    private static final String TAG = VolunteerActivity.class.getSimpleName();
     //private ImageView join_imgView;
     private TextView join_textView;
     private Button join_botton;
@@ -38,8 +37,7 @@ public class VolunteerActivity extends AppCompatActivity {
     private ViewPager mPager;
     private VolunteerApiService v_service;
 
-    private String [] v_title = {"장소", "일시", "시간","집합장소", "모집인원","상세설명"};
-    private String [] v_content;
+    private String[] v_title = {"장소", "일시", "시간", "집합장소", "모집인원", "상세설명"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,55 +46,16 @@ public class VolunteerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_volunteer);
         Intent intent = getIntent();
 
-        //join_imgView = (ImageView) findViewById(R.id.join_imgView);
-        //join_textView = (TextView) findViewById(R.id.join_textView);
         join_botton = (Button) findViewById(R.id.join_button);
-        //join_imgView.setScaleType(ImageView.ScaleType.FIT_END); // ImageView 사이즈 조절
         lvTest = (ListView) findViewById(R.id.lv_content);
-        // /adapter/VolunteerPageAdapter클래스 이용 (클래스 수정 필요)
-        mPager = (ViewPager)findViewById(R.id.pager);
+        mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(new VolunteerPagerAdapter(getApplicationContext()));
-
-        v_service= ServiceGenerator.getInstance().createService(VolunteerApiService.class);
-        Call<Model> call = v_service.getVolunteer_info();
-        call.enqueue(new Callback<Model>() {
-            @Override
-            public void onResponse(Call<Model> call, Response<Model> response) {
-                if(response.isSuccessful()){
-                    Toast.makeText(VolunteerActivity.this,"성공",Toast.LENGTH_LONG).show();
-                    Model model= response.body();
-
-                    // 사진 받아오기 model.getVolunteer_info().get(0).getPicture();
-                    v_content[0]=model.getVolunteer_info().get(0).getVolunteer_title();
-                    v_content[1]=model.getVolunteer_info().get(0).getSchedule();
-                    v_content[2]=model.getVolunteer_info().get(0).getTime();
-                    v_content[3]=model.getVolunteer_info().get(0).getSpot();
-                    v_content[4]=" "+model.getVolunteer_info().get(0).getTotal_volunteer() //현재 모집인원
-                    +"/" +model.getVolunteer_info().get(0).getRecruitment(); //전체 모집인원
-                    // 상세설명 서버에 추가해야함 #서버내용구현 이후
-
-                    for(int i=0; i<6; i++){
-                        v_content[i] = v_content[i] +" : "+ v_title[i];
-                    }
-                    adapter = new ArrayAdapter<String>(VolunteerActivity.this, android.R.layout.simple_list_item_1,v_content);
-                    lvTest.setAdapter(adapter);
-                }
-                else{
-                    int statusCode = response.code();
-                    Log.e("My Error Tag", "응답코드:"+statusCode);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Model> call, Throwable t) {
-                Log.e("My Error Tag","서버 onFailure 에러내용:"+t.getMessage());
-            }
-        });
+        v_service = ServiceGenerator.getInstance().createService(VolunteerApiService.class);
 
         join_botton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // JoinDialog dialog = new JoinDialog(VolunteerActivity.this);
+                // JoinDialog dialog = new JoinDialog(VolunteerActivity.this);
                 final Dialog dialog_check = new Dialog(VolunteerActivity.this);
                 dialog_check.setContentView(R.layout.join_agreement);
                 dialog_check.setTitle("주의사항");
@@ -126,29 +85,29 @@ public class VolunteerActivity extends AppCompatActivity {
 
                         Button btn_info_ok = (Button) dialog_info.findViewById(R.id.btn_join_OK);
                         Button btn_info_cancel = (Button) dialog_info.findViewById(R.id.btn_join_Cancel);
-                        // if button is clicked, close the custom dialog
 
                         btn_info_ok.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Users v_user = new Users();
+                                User v_user = new User();
                                 v_user.setName(text_name.getText().toString());
                                 v_user.setPhone_num(text_phone.getText().toString());
 
-                                Call<Users> call = v_service.joinVolunteer(v_user);
-                                call.enqueue(new Callback<Users>() {
+                                Call<User> call = v_service.joinVolunteer(v_user);
+                                call.enqueue(new Callback<User>() {
                                     @Override
-                                    public void onResponse(Call<Users> call, Response<Users> response) {
-                                        Toast.makeText(VolunteerActivity.this,"서버전송 완료",Toast.LENGTH_LONG).show();
+                                    public void onResponse(Call<User> call, Response<User> response) {
+                                        Log.d(TAG, "onResponse: " + response.message());
+                                        setBntJoin(join_botton);
+
                                     }
+
                                     @Override
-                                    public void onFailure(Call<Users> call, Throwable t) {
-                                        Toast.makeText(VolunteerActivity.this,"서버전송 실패",Toast.LENGTH_LONG).show();
+                                    public void onFailure(Call<User> call, Throwable t) {
+                                        Toast.makeText(VolunteerActivity.this, "서버전송 실패", Toast.LENGTH_LONG).show();
                                     }
                                 });
-                                // 네트워크로 정보 보내기
                                 dialog_info.dismiss();
-                                setBntJoin(v);
                             }
                         });
 
@@ -171,7 +130,7 @@ public class VolunteerActivity extends AppCompatActivity {
     }
 
     // 참가신청 버튼변경 함수
-    public void setBntJoin(View v){
+    public void setBntJoin(View v) {
         //네트워크로 확인 해야함
         join_botton.setBackgroundColor(ContextCompat.getColor(v.getContext(), R.color.colorChanged));
         join_botton.setText("참가신청 완료");

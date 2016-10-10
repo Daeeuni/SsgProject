@@ -7,8 +7,11 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Volunteer {
 
+    @SerializedName("vid")
+    private int volunteerId;
+
     @SerializedName("vname")
-    private String volunteer_title;
+    private String volunteerTitle;
 
     private String spot;
 
@@ -22,18 +25,67 @@ public class Volunteer {
 
     private String picture;
 
-    public String getVolunteer_title(){ return volunteer_title; }
+    public int getVolunteerId() {
+        return volunteerId;
+    }
 
-    public String getSpot(){ return spot; }
+    public String getVolunteerTitle() {
+        return volunteerTitle;
+    }
 
-    public String getSchedule() { return schedule; }
+    public String getSpot() {
+        return spot;
+    }
 
-    public String getTime() { return  time; }
+    public String getSchedule() {
+        return schedule;
+    }
 
-    public int getRecruitment() { return  recruitment; }
+    public String getTime() {
+        return time;
+    }
 
-    public int getTotal_volunteer() { return total_volunteer; }
+    public int getRecruitment() {
+        return recruitment;
+    }
 
-    public String getPicture() { return picture; }
+    public int getTotal_volunteer() {
+        return total_volunteer;
+    }
 
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setVolunteerId(int volunteerId) {
+        this.volunteerId = volunteerId;
+    }
+
+    public void setVolunteerTitle(String volunteerTitle) {
+        this.volunteerTitle = volunteerTitle;
+    }
+
+    public void setTotal_volunteer(int total_volunteer) {
+        this.total_volunteer = total_volunteer;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public void setSpot(String spot) {
+        this.spot = spot;
+    }
+
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
+    }
+
+    public void setRecruitment(int recruitment) {
+        this.recruitment = recruitment;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
 }

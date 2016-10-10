@@ -15,8 +15,11 @@ public class Model {
     @SerializedName("ssg_count")
     private int ssgCount;
 
+    @SerializedName("tip_list")
+    public ArrayList<SsacTip> ssacTips;
+
     @SerializedName("volunteer_list")
-    private ArrayList<Volunteer> volunteer_info;
+    public ArrayList<Volunteer> volunteers;
 
     public int getCode() {
         return code;
@@ -41,8 +44,6 @@ public class Model {
     public void setSsgCount(int ssgCount) {
         this.ssgCount = ssgCount;
     }
-
-    public ArrayList<Volunteer> getVolunteer_info() { return volunteer_info; }
 
 }
 

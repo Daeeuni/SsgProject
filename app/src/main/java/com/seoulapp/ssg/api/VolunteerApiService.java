@@ -1,7 +1,7 @@
 package com.seoulapp.ssg.api;
 
 import com.seoulapp.ssg.model.Model;
-import com.seoulapp.ssg.model.Users;
+import com.seoulapp.ssg.model.User;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -15,7 +15,8 @@ public interface VolunteerApiService {
     @GET("/volunteer_list")
     Call<Model> getVolunteer_info();
 
+
     @POST("/volunteer_join")
-    Call<Users> joinVolunteer(@Body Users user);
+    Call<User> joinVolunteer(@Body User user);
 
 }
