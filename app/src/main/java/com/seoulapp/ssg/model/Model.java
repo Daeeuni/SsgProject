@@ -18,8 +18,6 @@ public class Model {
     @SerializedName("volunteer_list")
     private ArrayList<Volunteer> volunteer_info;
 
-    private Users user;
-
     public int getCode() {
         return code;
     }
@@ -44,9 +42,7 @@ public class Model {
         this.ssgCount = ssgCount;
     }
 
+    public ArrayList<Volunteer> getVolunteer_info() { return volunteer_info; }
 
-    public ArrayList<Volunteer> getVolunteer_info() {
-        return volunteer_info;
-    }
 }
 
