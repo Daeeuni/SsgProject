@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+
+
 import android.util.Log;
 import android.view.View;
 
@@ -17,10 +19,13 @@ import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.SsgApiService;
 import com.seoulapp.ssg.listener.RecyclerItemClickListener;
 import com.seoulapp.ssg.model.Model;
+import com.seoulapp.ssg.model.User;
 import com.seoulapp.ssg.model.Volunteer;
 import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.adapter.SsacTipPagerAdapter;
 import com.seoulapp.ssg.ui.adapter.VolunteerRecyclerAdapter;
+
+
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         volunteerRecyclerAdapter = new VolunteerRecyclerAdapter(this);
         rcv_volunteer.setAdapter(volunteerRecyclerAdapter);
+
         tipPagerAdapter = new SsacTipPagerAdapter(this);
         ssacPager.setAdapter(tipPagerAdapter);
         if (toolbar != null) {
@@ -81,11 +87,11 @@ public class MainActivity extends AppCompatActivity {
                             public void onItemClick(View view, int position) {
                                 Volunteer volunteer = volunteerRecyclerAdapter.getItem(position);
                                 Intent intent = new Intent(MainActivity.this, VolunteerActivity.class);
-                                intent.putExtra("volunteerId", volunteer.getVolunteerId());
+                                intent.putExtra("volunteerParcel", volunteer);
                                 startActivity(intent);
                             }
                         }
-                )
+            )
         );
 
         getMainViewData();

@@ -7,10 +7,10 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#00b3b3" />
+        android:id="@+id/iv_volunteer_spot" />
 
     <TextView
-        android:id="@+id/tv_vollunteer_name"
+        android:id="@+id/tv_volunteer_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
