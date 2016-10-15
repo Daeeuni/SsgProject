@@ -57,7 +57,7 @@ public class VolunteerRecyclerAdapter extends BasicRecyclerAdapter<Volunteer> {
             tvVolunteerName.setText(volunteer.getSpot());
             Glide
                     .with(getContext())
-                    .load(volunteer.getPicture())
+                    .load(volunteer.getThumbnail())
                     .centerCrop()
                     .bitmapTransform(new CropCircleTransformation(getContext()))
                     .into(ivVolunteerSpot);
