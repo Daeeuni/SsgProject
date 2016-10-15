@@ -1,19 +1,23 @@
 package com.seoulapp.ssg.ui.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.List;
+
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import com.bumptech.glide.Glide;
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.model.Volunteer;
 import com.seoulapp.ssg.ui.adapter.basic.BasicRecyclerAdapter;
 import com.seoulapp.ssg.ui.adapter.viewholder.BasicViewHolder;
 
-import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 

@@ -14,16 +14,16 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="이 름"
-            android:textSize="20dp"
+            android:text="@string/txt_info_name"
+            android:textSize="18dp"
             android:id="@+id/txt_info_name"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="실명을 입력해주세요"
-            android:textSize="20dp"
+            android:hint="@string/edit_name"
+            android:textSize="18dp"
             android:ems="10"
             android:id="@+id/edit_name" />
     </LinearLayout>
@@ -37,8 +37,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="연락처"
-            android:textSize="20dp"
+            android:text="@string/txt_info_phone"
+            android:textSize="18dp"
             android:id="@+id/txt_info_phone"/>
 
         <EditText
@@ -46,8 +46,8 @@
             android:layout_height="wrap_content"
             android:inputType="phone"
             android:ems="10"
-            android:text="010-0000-0000"
-            android:textSize="20dp"
+            android:hint="010-0000-0000"
+            android:textSize="18dp"
             android:id="@+id/edit_phone" />
     </LinearLayout>
 
@@ -60,16 +60,16 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="E-Mail"
-            android:textSize="20dp"
+            android:text="@string/txt_info_email"
+            android:textSize="18dp"
             android:id="@+id/txt_info_email"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:ems="20"
-            android:text="example@ssg.com"
+            android:ems="18"
+            android:hint="example@ssg.com"
             android:textSize="20dp"
             android:id="@+id/edit_email"
             android:layout_gravity="center_horizontal" />
@@ -85,7 +85,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:text="취소"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:id="@+id/btn_join_Cancel"/>
 
         <Button
@@ -93,7 +93,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:text="확인"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:id="@+id/btn_join_OK"/>
 
     </LinearLayout>

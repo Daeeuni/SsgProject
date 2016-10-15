@@ -7,11 +7,10 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 /**
- * Created by win7-64 on 2016-09-10.
+ * Created by Boram Moon on 2016-10-11.
  */
+
 public interface SsgApiService {
-    @GET("ssg_cnt")
-    Call<Model> getSsgCount();
 
     @GET("maindata")
     Call<Model> getMainViewData();

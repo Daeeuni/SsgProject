@@ -10,16 +10,23 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.VolunteerApiService;
+import com.seoulapp.ssg.model.Model;
 import com.seoulapp.ssg.model.User;
+import com.seoulapp.ssg.model.Volunteer;
 import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.adapter.VolunteerPagerAdapter;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,16 +35,19 @@ import retrofit2.Response;
  * Created by Boram Moon on 2016-10-05.
  */
 public class VolunteerActivity extends AppCompatActivity {
+
     private static final String TAG = VolunteerActivity.class.getSimpleName();
-    //private ImageView join_imgView;
     private TextView join_textView;
     private Button join_botton;
-    private ListView lvTest;
     private ArrayAdapter<String> adapter;
     private ViewPager mPager;
     private VolunteerApiService v_service;
+    private VolunteerPagerAdapter v_pageAdapter;
 
-    private String[] v_title = {"장소", "일시", "시간", "집합장소", "모집인원", "상세설명"};
+    private ArrayList<String> pics;
+    private String[] v_title = {"제목", "날짜", "봉사시간", "활동장소", "집합장소", "모집인원",  "상세설명"};
+    Volunteer volParcel;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +55,28 @@ public class VolunteerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_volunteer);
         Intent intent = getIntent();
+        volParcel = intent.getParcelableExtra("volunteerParcel");
+        pics = new ArrayList<>();
+        pics.add(volParcel.getPicture());
+        v_pageAdapter = new VolunteerPagerAdapter(VolunteerActivity.this);
 
+        join_textView = (TextView) findViewById(R.id.join_textView);
         join_botton = (Button) findViewById(R.id.join_button);
-        lvTest = (ListView) findViewById(R.id.lv_content);
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setAdapter(new VolunteerPagerAdapter(getApplicationContext()));
-        v_service = ServiceGenerator.getInstance().createService(VolunteerApiService.class);
+        mPager.setAdapter(v_pageAdapter);
+        v_pageAdapter.additems(pics);
+
+        join_textView.append(v_title[0] + " : " + volParcel.getVolunteerTitle() + "\n");
+        join_textView.append(v_title[1] + " : " + volParcel.getSchedule() + "\n");
+        join_textView.append(v_title[2] + " : " + volParcel.getTime() + "\n");
+        join_textView.append(v_title[3] + " : " + volParcel.getSpot() + "\n");
+        join_textView.append(v_title[4] + " : " + volParcel.getMeeting_location() + "\n");
+        join_textView.append(v_title[5] + " : " + volParcel.getTotal_volunteer() + "/" + volParcel.getRecruitment() + "\n");
+        join_textView.append(v_title[6] + " : " + volParcel.getDetail_info()+ "\n");
 
         join_botton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // JoinDialog dialog = new JoinDialog(VolunteerActivity.this);
                 final Dialog dialog_check = new Dialog(VolunteerActivity.this);
                 dialog_check.setContentView(R.layout.join_agreement);
                 dialog_check.setTitle("주의사항");
@@ -75,38 +96,42 @@ public class VolunteerActivity extends AppCompatActivity {
                         // custom dialog
                         dialog_check.dismiss();
                         final Dialog dialog_info = new Dialog(VolunteerActivity.this);
-                        dialog_info.setContentView(R.layout.join_info);
+                        View view = getLayoutInflater().inflate(R.layout.join_info, null);
+                        final EditText edit_name = (EditText) view.findViewById(R.id.edit_name);
+                        final EditText edit_phone = (EditText) view.findViewById(R.id.edit_phone);
+                        final EditText edit_email = (EditText) view.findViewById(R.id.edit_email);
+
+                        Button btn_info_ok = (Button) view.findViewById(R.id.btn_join_OK);
+                        Button btn_info_cancel = (Button) view.findViewById(R.id.btn_join_Cancel);
+
+                        dialog_info.setContentView(view);
                         dialog_info.setTitle("봉사활동 신청 양식");
 
                         // set the custom dialog components - text, image and button
-                        final TextView text_name = (TextView) dialog_info.findViewById(R.id.txt_info_name);
-                        final TextView text_phone = (TextView) dialog_info.findViewById(R.id.txt_info_phone);
-                        TextView text_email = (TextView) dialog_info.findViewById(R.id.txt_info_email);
 
-                        Button btn_info_ok = (Button) dialog_info.findViewById(R.id.btn_join_OK);
-                        Button btn_info_cancel = (Button) dialog_info.findViewById(R.id.btn_join_Cancel);
 
                         btn_info_ok.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                User v_user = new User();
-                                v_user.setName(text_name.getText().toString());
-                                v_user.setPhone_num(text_phone.getText().toString());
-
-                                Call<User> call = v_service.joinVolunteer(v_user);
-                                call.enqueue(new Callback<User>() {
+                                int uid = 1;
+                                v_service = ServiceGenerator.getInstance().createService(VolunteerApiService.class);
+                                Call<Model> call = v_service.joinVolunteer(volParcel.getVolunteerId(), uid, edit_name.getText().toString(), edit_phone.getText().toString());
+                                call.enqueue(new Callback<Model>() {
                                     @Override
-                                    public void onResponse(Call<User> call, Response<User> response) {
-                                        Log.d(TAG, "onResponse: " + response.message());
-                                        setBntJoin(join_botton);
-
+                                    public void onResponse(Call<Model> call, Response<Model> response) {
+                                        if(response.isSuccessful()) {
+                                            if(response.body().getCode() == 200) {
+                                                setBntJoin(join_botton);
+                                            }
+                                        }
                                     }
 
                                     @Override
-                                    public void onFailure(Call<User> call, Throwable t) {
-                                        Toast.makeText(VolunteerActivity.this, "서버전송 실패", Toast.LENGTH_LONG).show();
+                                    public void onFailure(Call<Model> call, Throwable t) {
+                                        Log.d("joinOK", t.getMessage());
                                     }
                                 });
+
                                 dialog_info.dismiss();
                             }
                         });
@@ -129,13 +154,12 @@ public class VolunteerActivity extends AppCompatActivity {
 
     }
 
-    // 참가신청 버튼변경 함수
     public void setBntJoin(View v) {
-        //네트워크로 확인 해야함
-        join_botton.setBackgroundColor(ContextCompat.getColor(v.getContext(), R.color.colorChanged));
-        join_botton.setText("참가신청 완료");
-        join_botton.invalidate();
+            join_botton.setBackgroundColor(ContextCompat.getColor(v.getContext(), R.color.bntChanged));
+            join_botton.setText("참가신청 완료");
+            join_botton.invalidate();
     }
+
 
 
     /*
