@@ -8,7 +8,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 /**
- * Created by win7-64 on 2016-10-15.
+ * Created by daeuni on 2016-10-15.
  */
 
 public interface UserService {

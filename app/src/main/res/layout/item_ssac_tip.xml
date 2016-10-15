@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#dd000000"
@@ -12,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="Hot Pick"
+        tools:text="Hot Pick"
         android:textColor="@android:color/white"
         android:textSize="14dp"
         android:textStyle="bold" />
@@ -22,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="11dp"
-        android:text="벽 낙서 페인트로 지우기"
+        tools:text="벽 낙서 페인트로 지우기"
         android:textColor="@android:color/white"
         android:textSize="18dp" />
 
@@ -37,8 +38,7 @@
         android:id="@+id/tv_tip_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="페인팅 제대로 하는 법"
+        tools:text="페인팅 제대로 하는 법"
         android:textSize="14dp" />
-
 
 </LinearLayout>

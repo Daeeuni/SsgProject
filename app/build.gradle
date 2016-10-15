@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.seoulapp.ssg"
-        minSdkVersion 15
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -37,8 +37,10 @@ dependencies {
     compile 'com.android.support:design:24.0.0'
     compile 'com.facebook.android:facebook-android-sdk:4.16.+'
     compile group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
-
-
-
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'jp.wasabeef:glide-transformations:2.0.1'
 }

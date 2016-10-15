@@ -2,6 +2,8 @@ package com.seoulapp.ssg.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 /**
  * Created by win7-64 on 2016-09-10.
  */
@@ -10,8 +12,15 @@ public class Model {
 
     private String msg;
 
-    @SerializedName("ssg_count")
-    private int ssgCount;
+/*    @SerializedName("ssg_count")
+    private int ssgCount;*/
+
+    @SerializedName("tip_list")
+    public ArrayList<SsacTip> ssacTips;
+
+    @SerializedName("volunteer_list")
+    public ArrayList<Volunteer> volunteers;
+    public User user;
 
     public int getCode() {
         return code;
@@ -29,12 +38,11 @@ public class Model {
         this.msg = msg;
     }
 
-    public int getSsgCount() {
-        return ssgCount;
-    }
+/*  public int getSsgCount() { return ssgCount; }
 
     public void setSsgCount(int ssgCount) {
         this.ssgCount = ssgCount;
-    }
+    }*/
+
 }
 

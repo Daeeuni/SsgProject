@@ -2,10 +2,13 @@
 <resources>
     <color name="colorPrimary">#E5E9FC</color>
     <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorTvBackground">#efe4e4</color>
     <color name="colorAccent">#FF4081</color>
-
-
+    <color name="bntChanged">#e4101e</color>
+    <color name="bntNormal">#797e79</color>
     <!-- App Primaray TextColors -->
     <color name="app_body_text_1">#35437F</color>
+
+    <color name="drawer_body_text_1">#313131</color>
 
 </resources>

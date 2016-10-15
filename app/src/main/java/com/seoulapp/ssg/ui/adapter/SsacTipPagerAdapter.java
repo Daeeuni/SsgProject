@@ -21,9 +21,13 @@ public class SsacTipPagerAdapter extends PagerAdapter {
     private Context context;
     private ArrayList<SsacTip> items;
 
-    public SsacTipPagerAdapter(Context context, ArrayList<SsacTip> items) {
+    public SsacTipPagerAdapter(Context context) {
         this.context = context;
+    }
+
+    public void addItems(ArrayList<SsacTip> items){
         this.items = items;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -34,7 +38,7 @@ public class SsacTipPagerAdapter extends PagerAdapter {
         TextView tv_tip_subject = (TextView) itemView.findViewById(R.id.tv_tip_subject);
         TextView tv_tip_title = (TextView) itemView.findViewById(R.id.tv_tip_title);
         TextView tv_tip_subtitle = (TextView) itemView.findViewById(R.id.tv_tip_subtitle);
-        tv_tip_subject.setText(tip.subject);
+        tv_tip_subject.setText(tip.category);
         tv_tip_title.setText(tip.title);
         tv_tip_subtitle.setText(tip.subTitle);
         ((ViewPager)container).addView(itemView);
@@ -44,7 +48,7 @@ public class SsacTipPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return items.size();
+        return items == null ? 0: items.size();
 
     }
 

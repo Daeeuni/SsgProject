@@ -1,9 +1,17 @@
 <resources>
     <string name="app_name">쓱싹</string>
-    <string name="nav_ssg_history">나의 쓱 내역</string>
-    <string name="nav_sak_history">나의 싹 내역</string>
+    <string name="nav_ssg_gallery">쓱 갤러리</string>
+    <string name="nav_ssg_history">나의 쓱 제보내역</string>
+    <string name="nav_ssac_history">나의 싹 내역</string>
+    <string name="nav_app_setting">환경설정</string>
     <string name="openDrawer">open</string>
     <string name="closeDrawer">close</string>
     <string name="facebook_app_id">319403638420697</string>
     <string name="kakao_app_key">2cf8730d5c7336be327d17935824e2b7</string>
+
+    <string name="btn_volunteer">"봉사활동 참여할래요"</string>
+    <string name="txt_info_name">이름</string>
+    <string name="edit_name">실명을 입력해주세요</string>
+    <string name="txt_info_phone">연락처</string>
+    <string name="txt_info_email">E-mail</string>
 </resources>
