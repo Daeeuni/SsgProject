@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Model> call, Throwable t) {
-                Log.d(TAG, "onFailure: "+ t.getMessage());
+                Log.d(TAG, "onFailure: " + t.getMessage());
             }
         });
     }

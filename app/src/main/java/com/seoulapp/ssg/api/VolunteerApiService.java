@@ -15,7 +15,6 @@ public interface VolunteerApiService {
     @GET("/volunteer_list")
     Call<Model> getVolunteer_info();
 
-
     @POST("/volunteer_join")
     Call<User> joinVolunteer(@Body User user);
 

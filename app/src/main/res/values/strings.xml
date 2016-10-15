@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">쓱싹</string>
-    <string name="nav_ssg_history">나의 쓱 내역</string>
+    <string name="nav_ssg_gallery">쓱 갤러리</string>
+    <string name="nav_ssg_history">나의 쓱 제보내역</string>
     <string name="nav_sak_history">나의 싹 내역</string>
+    <string name="nav_app_setting">환경설정</string>
     <string name="openDrawer">open</string>
     <string name="closeDrawer">close</string>
 </resources>

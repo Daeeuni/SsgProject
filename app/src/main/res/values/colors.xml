@@ -8,4 +8,6 @@
     <!-- App Primaray TextColors -->
     <color name="app_body_text_1">#35437F</color>
 
+    <color name="drawer_body_text_1">#313131</color>
+
 </resources>

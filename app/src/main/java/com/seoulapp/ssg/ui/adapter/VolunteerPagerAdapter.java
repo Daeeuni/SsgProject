@@ -63,6 +63,7 @@ public class VolunteerPagerAdapter extends PagerAdapter {
     public void startUpdate(ViewGroup container) {
         super.startUpdate(container);
     }
+
     @Override
     public void finishUpdate(ViewGroup container) {
         super.finishUpdate(container);
