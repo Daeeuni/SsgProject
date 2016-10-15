@@ -3,12 +3,20 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_ssac_gallary"
+            android:title="@string/nav_ssac_gallary"/>
+
+        <item
             android:id="@+id/nav_ssg_history"
             android:title="@string/nav_ssg_history" />
 
         <item
             android:id="@+id/nav_sak_history"
             android:title="@string/nav_sak_history" />
+
+        <item
+            android:id="@+id/nav_setting"
+            android:title="@string/nav_setting"/>
 
     </group>
 
