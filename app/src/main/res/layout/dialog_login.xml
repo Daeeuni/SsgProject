@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="280dp"
+    android:layout_gravity="center"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+
+    android:layout_margin="20dp">
+
+    <TextView
+        android:id="@+id/edit_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:text="아이디 만들기"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="20dp"
+        android:background="#FFFFFF">
+
+        <EditText
+            android:id="@+id/edit_name"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:background="#CCCCCC"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/edit_email"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/edit_name"
+            android:layout_marginRight="20dp"
+            android:background="#CCCCCC"
+            android:textSize="20dp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/edit_name"
+            android:background="#999999" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dcdcdc"/>
+    <Button
+        android:id="@+id/edit_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="가입하기"
+        android:textSize="20dp"
+        android:textColor="#FFFFFF"
+        android:layout_gravity="center"
+        />
+</LinearLayout>
