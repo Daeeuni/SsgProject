@@ -39,8 +39,17 @@
 
             android:layout_marginLeft="72px"
             android:layout_marginRight="72px"/>
+
+            />-->
+          <com.kakao.usermgmt.LoginButton
+        android:id="@+id/com_kakao_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="72px"
+        android:layout_marginRight="72px"/>
+
         <Button
-            android:layout_below="@+id/label"
             android:id="@+id/facebook_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,24 +60,16 @@
             android:layout_weight="2"
             android:layout_marginTop="72px"
             android:layout_marginLeft="72px"
-            android:layout_marginRight="72px"
-            />-->
-          <com.kakao.usermgmt.LoginButton
-        android:id="@+id/com_kakao_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:layout_marginLeft="72px"
-        android:layout_marginRight="72px"/>
+            android:layout_marginRight="72px"/>
 
-    <com.facebook.login.widget.LoginButton
+   <!-- <com.facebook.login.widget.LoginButton
         android:layout_below="@+id/label"
         android:id="@+id/facebook_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="72px"
         android:layout_marginLeft="72px"
-        android:layout_marginRight="72px"/>
+        android:layout_marginRight="72px"/>-->
 
     <TextView
         android:id="@+id/tvLinkify"
