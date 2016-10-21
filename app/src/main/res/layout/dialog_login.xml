@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="280dp"
+    android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="#FFFFFF"
     android:orientation="vertical"
@@ -29,27 +29,28 @@
 
         <EditText
             android:id="@+id/edit_name"
-            android:layout_width="180dp"
+            android:layout_width="170dp"
             android:layout_height="40dp"
             android:layout_marginBottom="20dp"
             android:layout_marginRight="20dp"
-            android:background="#CCCCCC"
-            android:textSize="20dp" />
+            android:background="#EEEEEE"
+            android:textSize="20dp"
+            android:hint="이름"/>
 
         <EditText
             android:id="@+id/edit_email"
-            android:layout_width="180dp"
+            android:layout_width="170dp"
             android:layout_height="40dp"
             android:layout_below="@+id/edit_name"
             android:layout_marginRight="20dp"
-            android:background="#CCCCCC"
-            android:textSize="20dp" />
+            android:background="#EEEEEE"
+            android:textSize="20dp"
+            android:hint="이메일"/>
 
         <ImageView
+            android:id="@+id/profile_picture"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:layout_toRightOf="@+id/edit_name"
             android:background="#999999" />
 

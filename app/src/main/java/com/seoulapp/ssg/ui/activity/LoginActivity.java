@@ -5,11 +5,11 @@ package com.seoulapp.ssg.ui.activity;
  */
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.util.Linkify;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
@@ -20,6 +20,10 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.kakao.auth.ErrorCode;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
@@ -31,6 +35,7 @@ import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
 import com.seoulapp.ssg.R;
+import com.seoulapp.ssg.ui.dialog.LoginDialog;
 
 import org.json.JSONObject;
 
@@ -38,12 +43,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity  {
     private static final String TAG = LoginActivity.class.getSimpleName();
     private LoginButton loginButton;
-    private Button CustomloginButton;
     private CallbackManager callbackManager;
     SessionCallback callback;
+
+    private LoginDialog loginDialog;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
 
     @Override
@@ -77,18 +88,20 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) { //로그인 성공시 호출되는 메소드
-                Log.d(TAG, "onSuccess: " + loginResult.getAccessToken().getToken() + " "
-                        + loginResult.getAccessToken().getUserId() + " " + loginResult.getAccessToken().getPermissions());
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
-
+                final String profile = "https://graph.facebook.com/" + loginResult.getAccessToken().getUserId() + "/picture?type=normal";
                 //loginResult.getAccessToken() 정보를 가지고 유저 정보를 가져올수 있습니다.
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 try {
-                                    Log.d("TAG", "onCompleted: " + object.toString());
+
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("name",object.getString("name"));
+                                    bundle.putString("profile",profile);
+                                    loginDialog = new LoginDialog();
+                                    loginDialog.setArguments(bundle);
+                                    loginDialog.show(getSupportFragmentManager(), "login");
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -116,6 +129,9 @@ public class LoginActivity extends AppCompatActivity {
 
         callback = new SessionCallback();
         Session.getCurrentSession().addCallback(callback);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -127,8 +143,55 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
-
     }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Login Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
+
+    private void redirectMainActivity(){
+        startActivity(new Intent(this,LoginDialog.class));
+        finish();
+    }/*
+    protected void redirectLoginActivity(){
+        final Intent intent = new Intent(this,LoginDialog.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+        finish();
+    }*/
 
     private class SessionCallback implements ISessionCallback {
 
@@ -146,7 +209,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (result == ErrorCode.CLIENT_ERROR_CODE) {
                         finish();
                     } else {
-                        //redirectMainActivity();
+                        redirectMainActivity();
                     }
                 }
 
@@ -162,10 +225,18 @@ public class LoginActivity extends AppCompatActivity {
                 public void onSuccess(UserProfile userProfile) {
                     //로그인에 성공하면 로그인한 사용자의 일련번호, 닉네임, 이미지url등을 리턴합니다.
                     //사용자 ID는 보안상의 문제로 제공하지 않고 일련번호는 제공합니다.
-                    Log.e("UserProfile", userProfile.toString());
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Log.e("UserProfile", "UserProfle : " + userProfile);
+ /*                   Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
-                    finish();
+                    finish();*/
+                    Bundle bundle = new Bundle();
+                    Log.e("UserProfile", "nickname: " + userProfile.getNickname() );
+                    bundle.putString("name",userProfile.getNickname());
+                    bundle.putString("profile",userProfile.getThumbnailImagePath());
+
+                    LoginDialog loginDialog = new LoginDialog();
+                    loginDialog.setArguments(bundle);
+                    loginDialog.show(getSupportFragmentManager(), null);
                 }
             });
 
