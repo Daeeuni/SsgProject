@@ -1,6 +1,7 @@
 package com.seoulapp.ssg.api;
 
 import com.seoulapp.ssg.model.Model;
+import com.seoulapp.ssg.model.SsgModel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -16,5 +17,5 @@ public interface SsgApiService {
     Call<Model> getMainViewData();
 
     @GET("gallery")
-    Call<Model> getSsgGallery(@Query("page") int page);
+    Call<SsgModel> getSsgGallery(@Query("page") int page);
 }

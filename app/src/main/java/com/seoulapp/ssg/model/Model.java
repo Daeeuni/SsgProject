@@ -12,9 +12,6 @@ public class Model {
 
     private String msg;
 
-/*    @SerializedName("ssg_count")
-    private int ssgCount;*/
-
     @SerializedName("tip_list")
     public ArrayList<SsacTip> ssacTips;
 
@@ -38,11 +35,7 @@ public class Model {
         this.msg = msg;
     }
 
-/*  public int getSsgCount() { return ssgCount; }
 
-    public void setSsgCount(int ssgCount) {
-        this.ssgCount = ssgCount;
-    }*/
 
 }
 

@@ -11,11 +11,12 @@
         android:layout_weight="0.35"
         android:background="@color/colorPrimary">
 
-        <ImageView
+        <Button
             android:layout_width="144dp"
             android:layout_height="144dp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_report" />
+            android:background="@drawable/ic_report"
+            android:id="@+id/btn_ssg_report"/>
     </FrameLayout>
 
     <LinearLayout

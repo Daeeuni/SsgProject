@@ -2,7 +2,9 @@ package com.seoulapp.ssg.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -10,33 +12,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-
-
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.SsgApiService;
 import com.seoulapp.ssg.listener.RecyclerItemClickListener;
 import com.seoulapp.ssg.model.Model;
-import com.seoulapp.ssg.model.User;
 import com.seoulapp.ssg.model.Volunteer;
 import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.adapter.SsacTipPagerAdapter;
 import com.seoulapp.ssg.ui.adapter.VolunteerRecyclerAdapter;
-
-
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private Toolbar toolbar;
-    private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private ViewPager ssacPager;
     private RecyclerView rcv_volunteer;
@@ -50,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        navigationView = (NavigationView) findViewById(R.id.navigationView);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ssacPager = (ViewPager) findViewById(R.id.vp_ssac_tip);
         rcv_volunteer = (RecyclerView) findViewById(R.id.rcv_volunteer);
@@ -61,6 +58,15 @@ public class MainActivity extends AppCompatActivity {
 
         tipPagerAdapter = new SsacTipPagerAdapter(this);
         ssacPager.setAdapter(tipPagerAdapter);
+
+        Button btnSsgReport = (Button) findViewById(R.id.btn_ssg_report);
+        btnSsgReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, ReportActivity.class);
+                startActivity(i);
+            }
+        });
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
@@ -94,6 +100,10 @@ public class MainActivity extends AppCompatActivity {
                 )
         );
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
         getMainViewData();
 
     }
@@ -105,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {
-                Log.d(TAG, "onResponse: " + response.message());
 
                 if (response.isSuccessful()) {
                     volunteerRecyclerAdapter.addItems(response.body().volunteers);
@@ -118,5 +127,19 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onFailure: " + t.getMessage());
             }
         });
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.nav_ssg_gallery:
+                Intent i = new Intent(MainActivity.this, SsgGalleryActivity.class);
+                startActivity(i);
+                break;
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return false;
     }
 }
