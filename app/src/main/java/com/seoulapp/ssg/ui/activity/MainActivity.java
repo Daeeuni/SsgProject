@@ -16,7 +16,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.SsgApiService;
 import com.seoulapp.ssg.listener.RecyclerItemClickListener;
@@ -26,6 +29,7 @@ import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.adapter.SsacTipPagerAdapter;
 import com.seoulapp.ssg.ui.adapter.VolunteerRecyclerAdapter;
 
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,16 +51,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-
-
-       /* String name = intent.getStringExtra("입력한 이름");
-        if(name.equals(""))
-            Toast.makeText(this, "입력한 아이디가 없습니다!", Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(this, "입력한 아이디는 " + id + "입니다.", Toast.LENGTH_SHORT).show();*/
-
+       Intent i = getIntent();
+        String profilePath = i.getStringExtra("profile_picture");
+        String profileName = i.getStringExtra("profile_name");
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -69,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         tipPagerAdapter = new SsacTipPagerAdapter(this);
         ssacPager.setAdapter(tipPagerAdapter);
+
 
         Button btnSsgReport = (Button) findViewById(R.id.btn_ssg_report);
         btnSsgReport.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +112,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
 
+        View nav_header_view = navigationView.getHeaderView(0);
+
+        ImageView ivProfile = (ImageView) nav_header_view.findViewById(R.id.iv_profile_picture);
+        Glide
+                .with(this)
+                .load(profilePath)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .into(ivProfile);
+        TextView tvProfile = (TextView) nav_header_view.findViewById(R.id.tv_user_name);
+        tvProfile.setText(profileName);
 
         getMainViewData();
 
@@ -148,6 +156,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent i = new Intent(MainActivity.this, SsgGalleryActivity.class);
                 startActivity(i);
                 break;
+            case R.id.nav_setting:
+               // intent i = new intent(MainActivity.this, )
+
+                break;
+
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

@@ -24,12 +24,10 @@
 
     </android.support.v7.widget.Toolbar>
 
-
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <include
             layout="@layout/app_bar_main"
@@ -44,8 +42,8 @@
             android:background="@color/colorPrimary"
             android:fitsSystemWindows="true"
             app:headerLayout="@layout/nav_header_main"
-            app:menu="@menu/activity_main_drawer"
-            app:itemTextColor="@color/drawer_body_text_1"/>
+            app:itemTextColor="@color/drawer_body_text_1"
+            app:menu="@menu/activity_main_drawer" />
 
     </android.support.v4.widget.DrawerLayout>
 

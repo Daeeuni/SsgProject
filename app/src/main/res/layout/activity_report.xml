@@ -16,7 +16,6 @@
         android:orientation="vertical"
         android:padding="@dimen/activity_horizontal_margin">
 
-
         <ImageView
             android:id="@+id/iv_upload_picture"
             android:layout_width="match_parent"
