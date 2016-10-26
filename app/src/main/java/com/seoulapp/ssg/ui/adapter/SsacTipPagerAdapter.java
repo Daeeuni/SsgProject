@@ -6,8 +6,10 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.model.SsacTip;
 
@@ -25,7 +27,7 @@ public class SsacTipPagerAdapter extends PagerAdapter {
         this.context = context;
     }
 
-    public void addItems(ArrayList<SsacTip> items){
+    public void addItems(ArrayList<SsacTip> items) {
         this.items = items;
         notifyDataSetChanged();
     }
@@ -38,17 +40,19 @@ public class SsacTipPagerAdapter extends PagerAdapter {
         TextView tv_tip_subject = (TextView) itemView.findViewById(R.id.tv_tip_subject);
         TextView tv_tip_title = (TextView) itemView.findViewById(R.id.tv_tip_title);
         TextView tv_tip_subtitle = (TextView) itemView.findViewById(R.id.tv_tip_subtitle);
+        ImageView iv_tip_thumbnail = (ImageView) itemView.findViewById(R.id.iv_tip_thumbnail);
         tv_tip_subject.setText(tip.category);
         tv_tip_title.setText(tip.title);
         tv_tip_subtitle.setText(tip.subTitle);
-        ((ViewPager)container).addView(itemView);
+        Glide.with(context).load(tip.thumbnail).into(iv_tip_thumbnail);
+        ((ViewPager) container).addView(itemView);
 
         return itemView;
     }
 
     @Override
     public int getCount() {
-        return items == null ? 0: items.size();
+        return items == null ? 0 : items.size();
 
     }
 

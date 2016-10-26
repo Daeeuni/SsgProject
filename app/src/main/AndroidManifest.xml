@@ -4,11 +4,13 @@
     package="com.seoulapp.ssg">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    // 다음 지도
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".ui.activity.GlobalApplication"
+        android:name=".SsgApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -20,7 +22,6 @@
             android:label="">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -46,7 +47,9 @@
 
         <activity android:name=".ui.activity.VolunteerActivity" />
         <activity android:name=".ui.activity.SsgGalleryActivity" />
-        <activity android:name=".ui.activity.ReportActivity"></activity>
+        <activity
+            android:name=".ui.activity.ReportActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 
 </manifest>

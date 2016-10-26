@@ -78,4 +78,5 @@ public class LoginDialog extends DialogFragment {
 
         return v;
     }
+
 }

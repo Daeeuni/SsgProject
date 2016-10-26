@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,7 +8,8 @@
     android:orientation="vertical"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:paddingTop="16dp">
+    android:paddingTop="16dp"
+    tools:ignore="MissingPrefix">
 
 
     <ImageView
@@ -26,6 +28,7 @@
         android:drawableLeft="@drawable/ic_room_white_24dp"
         android:gravity="center"
         android:textColor="@android:color/black"
+        app:font="custom5"
         tools:text="경복궁 향원정 두번째 기둥" />
 
     <TextView
@@ -35,6 +38,7 @@
         android:layout_gravity="end"
         android:layout_marginBottom="6dp"
         android:textColor="@android:color/black"
+        app:font="custom5"
         tools:text="2016.08.07" />
 
     <View
@@ -50,6 +54,7 @@
         android:layout_marginBottom="6dp"
         android:layout_marginTop="6dp"
         android:textColor="@android:color/black"
+        app:font="custom2"
         tools:text="너무 더러워요. 빨리 지워졌으면 좋겠어요" />
 
     <View
@@ -58,15 +63,15 @@
         android:background="@android:color/black" />
 
     <Button
+        android:id="@+id/btn_remove_ssg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="#687888"
-        tools:text="지워주세요"
-        android:id="@+id/btn_remove_ssg"
-        android:textColor="@android:color/white" />
+        android:background="#a8c0da"
+        tools:text="지워주세요" />
 
     <TextView
+        android:id="@+id/btn_report_ssg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
@@ -75,5 +80,6 @@
         android:drawableLeft="@drawable/ic_church_bell_black"
         android:gravity="center"
         android:text="이 게시물 신고하기"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/black"
+        app:font="custom2" />
 </LinearLayout>

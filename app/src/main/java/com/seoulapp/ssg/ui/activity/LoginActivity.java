@@ -36,7 +36,6 @@ import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.usermgmt.callback.MeResponseCallback;
 import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
-import com.kakao.util.helper.log.Logger;
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.ui.dialog.LoginDialog;
 
@@ -49,9 +48,8 @@ import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = LoginActivity.class.getSimpleName();
-    //    private LoginButton loginButton;
-    private CallbackManager callbackManager;
-    SessionCallback callback;
+    private CallbackManager mCallbackManager;
+    private SessionCallback callback;
 
     private LoginDialog loginDialog;
     /**
@@ -66,9 +64,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext()); // SDK 초기화 (setContentView 보다 먼저 실행되어야합니다. 안그럼 에러납니다.)
-        callbackManager = CallbackManager.Factory.create();  //로그인 응답을 처리할 콜백 관리자
+        mCallbackManager = CallbackManager.Factory.create();  //로그인 응답을 처리할 콜백 관리자
 
-        LoginManager.getInstance().registerCallback(callbackManager, mCallback);
+        LoginManager.getInstance().registerCallback(mCallbackManager, mCallback);
         setContentView(R.layout.activity_login);
 
         TextView tvLinkify = (TextView) findViewById(R.id.tvLinkify);
@@ -87,46 +85,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Linkify.addLinks(tvLinkify, pattern1, "http://naver.com", null, mTransform);
         btnFacebook = (Button) findViewById(R.id.facebook_login);
         btnFacebook.setOnClickListener(this);
-//        loginButton = (LoginButton) findViewById(R.id.facebook_login); //페이스북 로그인 버튼
-        //유저 정보, 친구정보, 이메일 정보등을 수집하기 위해서는 허가(퍼미션)를 받아야 합니다.
-//        loginButton.setReadPermissions("public_profile", "user_friends", "email");
-        //버튼에 바로 콜백을 등록하는 경우 LoginManager에 콜백을 등록하지 않아도됩니다.
-        //반면에 커스텀으로 만든 버튼을 사용할 경우 아래보면 CustomloginButton OnClickListener안에 LoginManager를 이용해서
-        //로그인 처리를 해주어야 합니다.
-//        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-//            @Override
-//            public void onSuccess(LoginResult loginResult) { //로그인 성공시 호출되는 메소드
-//                final String profile = "https://graph.facebook.com/" + loginResult.getAccessToken().getUserId() + "/picture?type=normal";
-//                //loginResult.getAccessToken() 정보를 가지고 유저 정보를 가져올수 있습니다.
-//                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
-//                        new GraphRequest.GraphJSONObjectCallback() {
-//                            @Override
-//                            public void onCompleted(JSONObject object, GraphResponse response) {
-//                                try {
-//
-//                                    Bundle bundle = new Bundle();
-//                                    bundle.putString("name",object.getString("name"));
-//                                    bundle.putString("profile",profile);
-//                                    loginDialog = new LoginDialog();
-//                                    loginDialog.setArguments(bundle);
-//                                    loginDialog.show(getSupportFragmentManager(), "login");
-//                                } catch (Exception e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        });
-//                request.executeAsync();
-//
-//            }
-//
-//            @Override
-//            public void onError(FacebookException error) {
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//            }
-//        });
 
         UserManagement.requestLogout(new LogoutResponseCallback() {
             @Override
@@ -182,13 +140,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void redirectMainActivity() {
         startActivity(new Intent(this, LoginDialog.class));
         finish();
-    }/*
-    protected void redirectLoginActivity(){
-        final Intent intent = new Intent(this,LoginDialog.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        startActivity(intent);
-        finish();
-    }*/
+    }
 
     private class SessionCallback implements ISessionCallback {
 
@@ -200,7 +152,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onFailure(ErrorResult errorResult) {
                     String message = "failed to get user info. msg=" + errorResult;
-                    Logger.d(message);
+                    Log.e(TAG, "onFailure: " + message);
 
                     ErrorCode result = ErrorCode.valueOf(errorResult.getErrorCode());
                     if (result == ErrorCode.CLIENT_ERROR_CODE) {
@@ -212,6 +164,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 @Override
                 public void onSessionClosed(ErrorResult errorResult) {
+                    Log.e(TAG, "onSessionClosed: " + errorResult.getErrorMessage());
                 }
 
                 @Override
@@ -220,14 +173,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 @Override
                 public void onSuccess(UserProfile userProfile) {
-                    //로그인에 성공하면 로그인한 사용자의 일련번호, 닉네임, 이미지url등을 리턴합니다.
-                    //사용자 ID는 보안상의 문제로 제공하지 않고 일련번호는 제공합니다.
-                    Log.e("UserProfile", "UserProfle : " + userProfile);
- /*                   Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();*/
+                    Log.e(TAG, "onSuccess: 여기까지 들어옴");
+                    Log.e(TAG, "UserProfle : " + userProfile);
                     Bundle bundle = new Bundle();
-                    Log.e("UserProfile", "nickname: " + userProfile.getNickname());
+                    Log.e(TAG, "nickname: " + userProfile.getNickname());
                     bundle.putString("name", userProfile.getNickname());
                     bundle.putString("profile", userProfile.getThumbnailImagePath());
 
@@ -249,7 +198,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
-            case  R.id.facebook_login :
+            case R.id.facebook_login:
                 openFacebookSession();
                 break;
         }
@@ -259,21 +208,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //간편로그인시 호출 ,없으면 간편로그인시 로그인 성공화면으로 넘어가지 않음
-        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
-            return;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-
-    }
-
 
     private FacebookCallback<LoginResult> mCallback = new FacebookCallback<LoginResult>() {
         @Override
         public void onSuccess(LoginResult loginResult) {
+            Log.e(TAG, "onSuccess: accessToken = " + loginResult.getAccessToken().getToken());
             final String profile = "https://graph.facebook.com/" + loginResult.getAccessToken().getUserId() + "/picture?type=normal";
 
             GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
@@ -318,5 +257,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     };
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //간편로그인시 호출 ,없으면 간편로그인시 로그인 성공화면으로 넘어가지 않음
+        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
 
+    }
 }

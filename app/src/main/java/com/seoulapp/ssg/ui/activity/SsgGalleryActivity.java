@@ -1,27 +1,30 @@
 package com.seoulapp.ssg.ui.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.SsgApiService;
 import com.seoulapp.ssg.model.SsgModel;
 import com.seoulapp.ssg.network.ServiceGenerator;
-import com.seoulapp.ssg.ui.adapter.SsgGalleryRecylcerAdapter;
+import com.seoulapp.ssg.ui.adapter.SsgGalleryRecyclerAdapter;
 import com.seoulapp.ssg.utils.DividerItemDecoration;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SsgGalleryActivity extends AppCompatActivity {
+public class SsgGalleryActivity extends BaseActivity implements View.OnClickListener{
     private static final String TAG = SsgGalleryActivity.class.getSimpleName();
     boolean isLast = false;
+    private RecyclerView recyclerView;
+    private SsgGalleryRecyclerAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,19 +34,22 @@ public class SsgGalleryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
+
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            setTitle("");
         }
 
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        final SsgGalleryRecylcerAdapter mAdapter = new SsgGalleryRecylcerAdapter(this);
+        mAdapter = new SsgGalleryRecyclerAdapter(this);
+//        mAdapter.setOnSsgItemClick(this);
         recyclerView.setAdapter(mAdapter);
 
         SsgApiService service = ServiceGenerator.getInstance().createService(SsgApiService.class);
@@ -56,7 +62,6 @@ public class SsgGalleryActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     if (response.body().code == 200) {
                         mAdapter.addItems(response.body().ssgs);
-                        Log.d(TAG, "onResponse: " + response.body().ssgs.size());
                         if (response.body().last) {
                             isLast = response.body().last;
                         }
@@ -72,6 +77,36 @@ public class SsgGalleryActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        switch (id) {
 
+        }
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+//    @Override
+//    public void onEraseClick(int position) {
+//
+//    }
+
+//    @Override
+//    public void onReportClick(int position) {
+//        showReportDialog(position);
+//    }
+//
+//    @Override
+//    public void onOkClick(int position) {
+//        mAdapter.updateReportButton(position);
+//    }
 }

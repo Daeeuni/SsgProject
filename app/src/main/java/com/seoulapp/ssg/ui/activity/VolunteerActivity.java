@@ -11,9 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.VolunteerApiService;
@@ -23,10 +21,8 @@ import com.seoulapp.ssg.model.Volunteer;
 import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.adapter.VolunteerPagerAdapter;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -155,7 +151,7 @@ public class VolunteerActivity extends AppCompatActivity {
     }
 
     public void setBntJoin(View v) {
-            join_botton.setBackgroundColor(ContextCompat.getColor(v.getContext(), R.color.bntChanged));
+            join_botton.setBackgroundColor(ContextCompat.getColor(v.getContext(), R.color.btnChanged));
             join_botton.setText("참가신청 완료");
             join_botton.invalidate();
     }

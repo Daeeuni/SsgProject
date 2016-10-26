@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="168dp"
     android:background="@color/colorPrimary"
-    android:paddingBottom="24dp">
+    android:paddingBottom="24dp"
+    tools:ignore="MissingPrefix">
 
     <TextView
         android:id="@+id/tv_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/drawer_body_text_1"
+        android:layout_gravity="bottom|center_horizontal"
         android:text="동윤"
+        android:textColor="@color/drawer_body_text_1"
         android:textSize="26dp"
-        android:layout_gravity="bottom|center_horizontal" />
+        app:font="custom4" />
 </FrameLayout>

@@ -8,7 +8,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -26,17 +25,19 @@ import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.adapter.SsacTipPagerAdapter;
 import com.seoulapp.ssg.ui.adapter.VolunteerRecyclerAdapter;
 
+import me.relex.circleindicator.CircleIndicator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private ViewPager ssacPager;
+    private CircleIndicator circleIndicator;
     private RecyclerView rcv_volunteer;
 
     private SsacTipPagerAdapter tipPagerAdapter;
@@ -47,20 +48,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-
-
-       /* String name = intent.getStringExtra("입력한 이름");
-        if(name.equals(""))
-            Toast.makeText(this, "입력한 아이디가 없습니다!", Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(this, "입력한 아이디는 " + id + "입니다.", Toast.LENGTH_SHORT).show();*/
-
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ssacPager = (ViewPager) findViewById(R.id.vp_ssac_tip);
+        circleIndicator = (CircleIndicator) findViewById(R.id.indicator);
         rcv_volunteer = (RecyclerView) findViewById(R.id.rcv_volunteer);
         rcv_volunteer.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
@@ -130,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (response.isSuccessful()) {
                     volunteerRecyclerAdapter.addItems(response.body().volunteers);
                     tipPagerAdapter.addItems(response.body().ssacTips);
+                    circleIndicator.setViewPager(ssacPager);
                 }
             }
 
