@@ -56,15 +56,7 @@ public class LoginDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.dialog_login, container, false);
 
-        Button SignupButton = (Button) v.findViewById(R.id.edit_login);
-        SignupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LoginDialog.this.dismiss();
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                startActivity(intent);
-            }
-        });
+
         ImageView ivProfile;
 
         btnLogin = (Button) v.findViewById(R.id.edit_login);
@@ -75,6 +67,18 @@ public class LoginDialog extends DialogFragment {
         ivProfile = (ImageView) v.findViewById(R.id.profile_picture);
 
         Glide.with(this).load(mProfile).into(ivProfile);
+
+        Button SignupButton = (Button) v.findViewById(R.id.edit_login);
+        SignupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LoginDialog.this.dismiss();
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.putExtra("profile_picture", mProfile);
+                intent.putExtra("profile_name",mName);
+                startActivity(intent);
+            }
+        });
 
         return v;
     }

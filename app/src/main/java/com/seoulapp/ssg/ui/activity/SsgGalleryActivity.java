@@ -14,13 +14,13 @@ import com.seoulapp.ssg.api.SsgApiService;
 import com.seoulapp.ssg.model.SsgModel;
 import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.adapter.SsgGalleryRecyclerAdapter;
-import com.seoulapp.ssg.utils.DividerItemDecoration;
+import com.seoulapp.ssg.util.DividerItemDecoration;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SsgGalleryActivity extends BaseActivity implements View.OnClickListener{
+public class SsgGalleryActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = SsgGalleryActivity.class.getSimpleName();
     boolean isLast = false;
     private RecyclerView recyclerView;

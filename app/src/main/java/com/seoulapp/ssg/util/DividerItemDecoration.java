@@ -1,4 +1,4 @@
-package com.seoulapp.ssg.utils;
+package com.seoulapp.ssg.util;
 
 import android.content.Context;
 import android.content.res.TypedArray;

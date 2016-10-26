@@ -38,9 +38,9 @@
             android:id="@+id/profile_picture"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:scaleType="fitXY"
             android:layout_toRightOf="@+id/edit_name"
-            android:background="#999999" />
+            android:background="#999999"
+            android:scaleType="fitXY" />
 
         <EditText
             android:id="@+id/edit_email"
@@ -69,6 +69,5 @@
             android:background="#dcdcdc" />
 
     </RelativeLayout>
-
 
 </LinearLayout>

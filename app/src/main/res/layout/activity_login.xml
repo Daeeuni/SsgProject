@@ -25,6 +25,7 @@
         android:layout_weight="4"
         android:orientation="vertical">
 
+
         <com.kakao.usermgmt.LoginButton
             android:id="@+id/com_kakao_login"
             android:layout_width="match_parent"
