@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private SsacTipPagerAdapter tipPagerAdapter;
     private VolunteerRecyclerAdapter volunteerRecyclerAdapter;
+    String mName, mProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,7 +158,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(i);
                 break;
             case R.id.nav_setting:
-               // intent i = new intent(MainActivity.this, )
+                Intent intent = new Intent(MainActivity.this, SsgSettingActivity.class );
+                startActivity(intent);
+                Intent it = new Intent(MainActivity.this, ProfileChActivity.class);
+                it.putExtra("profile_picture",mProfile);
+                it.putExtra("profile_name",mName);
 
                 break;
 

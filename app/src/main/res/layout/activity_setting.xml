@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    >
+    <FrameLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:layout_weight="3">
+       <Button
+           android:id="@+id/profile_change"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:background="@android:color/white"
+           android:text="프로필 변경"
+           android:onClick="onClick"
+           android:textSize="30dp"
+           android:textColor="@color/drawer_body_text_1"/>
+
+   </FrameLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dcdcdc"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3">
+        <Button
+            android:id="@+id/eula_page"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:text="이용약관"
+            android:textSize ="30dp"
+            android:textColor="@color/drawer_body_text_1"/>
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dcdcdc"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3">
+        <Button
+            android:id="@+id/privacy_page"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:text="개인정보 취급방침"
+            android:textSize="30dp"
+            android:textColor="@color/drawer_body_text_1"
+            />
+
+    </FrameLayout>
+
+</LinearLayout>

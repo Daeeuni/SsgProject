@@ -19,7 +19,6 @@ import com.seoulapp.ssg.util.Utils;
 /**
  * Created by win7-64 on 2016-10-15.
  */
-
 public class LoginDialog extends DialogFragment {
     private static final String TAG = LoginDialog.class.getSimpleName();
 
@@ -77,9 +76,25 @@ public class LoginDialog extends DialogFragment {
                 intent.putExtra("profile_picture", mProfile);
                 intent.putExtra("profile_name",mName);
                 startActivity(intent);
+
+
+
             }
+
         });
+
 
         return v;
     }
+
+  /*  public void onActivityResult(int requetCode, int resultCode, Intent Data) {
+        super.onActivityResult(requestCode, resultCode, Data);
+        if(requestCode == REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                String phoneNumber = data.getExtras().getString("phoneNumber");
+            }
+        }
+    }*/
+
+
 }

@@ -9,6 +9,7 @@
     <string name="facebook_app_id">319403638420697</string>
     <string name="kakao_app_key">2cf8730d5c7336be327d17935824e2b7</string>
 
+
     <string name="btn_volunteer">"봉사활동 참여할래요"</string>
     <string name="txt_info_name">이름</string>
     <string name="edit_name">실명을 입력해주세요</string>

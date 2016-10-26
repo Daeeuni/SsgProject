@@ -49,7 +49,9 @@
         <activity android:name=".ui.activity.VolunteerActivity" />
         <activity android:name=".ui.activity.SsgGalleryActivity" />
         <activity android:name=".ui.activity.SsgSettingActivity"/>
-        <activity android:name=".ui.activity.ReportActivity"></activity>
+        <activity android:name=".ui.activity.ReportActivity">
+        </activity>
+        <activity android:name=".ui.activity.ProfileChActivity"/>
     </application>
 
 </manifest>
