@@ -8,7 +8,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -26,38 +25,43 @@ import com.seoulapp.ssg.listener.RecyclerItemClickListener;
 import com.seoulapp.ssg.model.Model;
 import com.seoulapp.ssg.model.Volunteer;
 import com.seoulapp.ssg.network.ServiceGenerator;
+import com.seoulapp.ssg.ui.adapter.SsacHistoryRecyclerAdapter;
 import com.seoulapp.ssg.ui.adapter.SsacTipPagerAdapter;
 import com.seoulapp.ssg.ui.adapter.VolunteerRecyclerAdapter;
 
+import me.relex.circleindicator.CircleIndicator;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private ViewPager ssacPager;
+    private CircleIndicator circleIndicator;
     private RecyclerView rcv_volunteer;
 
     private SsacTipPagerAdapter tipPagerAdapter;
     private VolunteerRecyclerAdapter volunteerRecyclerAdapter;
+    String mName, mProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       Intent i = getIntent();
+        Intent i = getIntent();
         String profilePath = i.getStringExtra("profile_picture");
         String profileName = i.getStringExtra("profile_name");
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ssacPager = (ViewPager) findViewById(R.id.vp_ssac_tip);
+        circleIndicator = (CircleIndicator) findViewById(R.id.indicator);
         rcv_volunteer = (RecyclerView) findViewById(R.id.rcv_volunteer);
         rcv_volunteer.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
@@ -120,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Glide
                 .with(this)
                 .load(profilePath)
+                .placeholder(R.drawable.ic_profile_none)
                 .bitmapTransform(new CropCircleTransformation(this))
                 .into(ivProfile);
         TextView tvProfile = (TextView) nav_header_view.findViewById(R.id.tv_user_name);
@@ -140,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (response.isSuccessful()) {
                     volunteerRecyclerAdapter.addItems(response.body().volunteers);
                     tipPagerAdapter.addItems(response.body().ssacTips);
+                    circleIndicator.setViewPager(ssacPager);
                 }
             }
 
@@ -159,21 +165,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(i);
                 break;
             case R.id.nav_setting:
-                //intent i2 = new intent(MainActivity.this, )
-
+                Intent it = new Intent(MainActivity.this, ProfileChActivity.class);
+                it.putExtra("profile_picture", mProfile);
+                it.putExtra("profile_name", mName);
                 break;
             case R.id.nav_ssg_history:
                 Intent i3 = new Intent(MainActivity.this, SsgHistoryActivity.class);
-                //i3.putExtra("myinfoParcel", 보내줄 객체);
                 startActivity(i3);
                 break;
 
             case R.id.nav_sak_history:
-                //Intent i4 = new Intent(MainActivity.this, )
-                //i4.putExtr("myinfoParcel", 보내줄 객체)
-                //startActivity(i);
-                break;
-
+                Intent intent = new Intent(MainActivity.this, MySsacHistoryActivity.class);
+                startActivity(intent);
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

@@ -12,7 +12,7 @@ import com.kakao.auth.AuthType;
 import com.kakao.auth.IApplicationConfig;
 import com.kakao.auth.ISessionConfig;
 import com.kakao.auth.KakaoAdapter;
-import com.seoulapp.ssg.ui.activity.GlobalApplication;
+import com.seoulapp.ssg.SsgApplication;
 
 /**
  * @author leoshin on 15. 9. 15.
@@ -54,12 +54,12 @@ public class KakaoSDKAdapter extends KakaoAdapter {
         return new IApplicationConfig() {
             @Override
             public Activity getTopActivity() {
-                return GlobalApplication.getCurrentActivity();
+                return SsgApplication.getCurrentActivity();
             }
 
             @Override
             public Context getApplicationContext() {
-                return GlobalApplication.getGlobalApplicationContext();
+                return SsgApplication.getGlobalApplicationContext();
             }
         };
     }

@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#E5E9FC</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#e8eceb</color>
+    <color name="colorPrimaryDark">#a8c0da</color>
     <color name="colorTvBackground">#efe4e4</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="bntChanged">#e4101e</color>
+    <color name="colorAccent">@android:color/black</color>
+    <color name="btnChanged">#e4101e</color>
     <color name="bntNormal">#797e79</color>
     <!-- App Primaray TextColors -->
     <color name="app_body_text_1">#35437F</color>
 
     <color name="drawer_body_text_1">#313131</color>
-
+    <color name="ssg_erase_btn_non_clicked">#105282</color>
+    <color name="ssg_erase_btn_clicked">#367caf</color>
 </resources>

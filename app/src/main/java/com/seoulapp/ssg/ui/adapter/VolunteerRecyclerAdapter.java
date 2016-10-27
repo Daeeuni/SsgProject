@@ -35,7 +35,7 @@ public class VolunteerRecyclerAdapter extends BasicRecyclerAdapter<Volunteer> {
     public BasicViewHolder getViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = getLayoutInflater();
 
-        return new VolunteerViewHolder(inflater.inflate(R.layout.item_volunteer_main, parent, false));
+        return new VolunteerViewHolder(inflater.inflate(R.layout.item_ssac_mini, parent, false));
     }
 
     private class VolunteerViewHolder extends BasicViewHolder<Volunteer> {
