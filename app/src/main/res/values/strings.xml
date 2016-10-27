@@ -35,4 +35,7 @@
         <item>갤러리</item>
     </string-array>
 
+    <string name="btn_setting_profie">프로필 변경</string>
+    <string name="btn_setting_policy_agreement">이용약관</string>
+    <string name="btn_setting_personal_info">개인정보 취급방침</string>
 </resources>

@@ -21,18 +21,18 @@ public class PolicyAgreementActivity extends AppCompatActivity {
         setContentView(R.layout.activity_policy_agreement);
         Intent intent = getIntent();
 
-    content = (TextView) findViewById(R.id.txt_content);
-    confirm = (Button) findViewById(R.id.btn_confirm);
+        content = (TextView) findViewById(R.id.txt_content);
+        confirm = (Button) findViewById(R.id.btn_confirm);
 
-    content.setText(Html.fromHtml(getResources().getString(R.string.policy_agreement)));
-    //flag 부분이 이해가 잘 안됨. 24api 이상부터는 fromhtml(String) 대체
+        content.setText(Html.fromHtml(getResources().getString(R.string.policy_agreement)));
+        //flag 부분이 이해가 잘 안됨. 24api 이상부터는 fromhtml(String) 대체
 
-    confirm.setOnClickListener(new View.OnClickListener() {
+        confirm.setOnClickListener(new View.OnClickListener() {
 
-        @Override
-        public void onClick(View v) {
-            finish();
-        }
-    });
-}
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
 }

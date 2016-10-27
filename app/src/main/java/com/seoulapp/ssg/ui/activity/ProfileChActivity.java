@@ -15,7 +15,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
  * Created by win7-64 on 2016-10-24.
  */
 
-public class ProfileChActivity extends AppCompatActivity {
+public class ProfileChActivity extends BaseActivity {
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

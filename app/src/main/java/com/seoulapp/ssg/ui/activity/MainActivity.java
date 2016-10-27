@@ -117,7 +117,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         navigationView.setNavigationItemSelectedListener(this);
 
 
-
         View nav_header_view = navigationView.getHeaderView(0);
 
         ImageView ivProfile = (ImageView) nav_header_view.findViewById(R.id.iv_profile_picture);
@@ -159,24 +158,29 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+        Intent intent;
         switch (id) {
             case R.id.nav_ssg_gallery:
-                Intent i = new Intent(MainActivity.this, SsgGalleryActivity.class);
-                startActivity(i);
+                intent = new Intent(MainActivity.this, SsgGalleryActivity.class);
+                startActivity(intent);
                 break;
-            case R.id.nav_setting:
-                Intent it = new Intent(MainActivity.this, ProfileChActivity.class);
-                it.putExtra("profile_picture", mProfile);
-                it.putExtra("profile_name", mName);
-                break;
+
             case R.id.nav_ssg_history:
-                Intent i3 = new Intent(MainActivity.this, SsgHistoryActivity.class);
-                startActivity(i3);
+                intent = new Intent(MainActivity.this, SsgHistoryActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.nav_sak_history:
-                Intent intent = new Intent(MainActivity.this, MySsacHistoryActivity.class);
+                intent = new Intent(MainActivity.this, MySsacHistoryActivity.class);
                 startActivity(intent);
+                break;
+
+            case R.id.nav_setting:
+                intent = new Intent(MainActivity.this, SsgSettingActivity.class);
+                intent.putExtra("profile_picture", mProfile);
+                intent.putExtra("profile_name", mName);
+                startActivity(intent);
+                break;
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

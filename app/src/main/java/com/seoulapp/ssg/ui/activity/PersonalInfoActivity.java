@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.seoulapp.ssg.R;
 
 public class PersonalInfoActivity extends AppCompatActivity {
+    private static final String TAG = PersonalInfoActivity.class.getSimpleName();
 
     private TextView content;
     private Button confirm;
@@ -19,6 +21,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_info);
+        Log.d(TAG, "onCreate: ");
         Intent intent = getIntent();
 
         content = (TextView) findViewById(R.id.txt_content);
