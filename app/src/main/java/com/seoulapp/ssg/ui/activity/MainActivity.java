@@ -25,6 +25,7 @@ import com.seoulapp.ssg.listener.RecyclerItemClickListener;
 import com.seoulapp.ssg.model.Model;
 import com.seoulapp.ssg.model.Volunteer;
 import com.seoulapp.ssg.network.ServiceGenerator;
+import com.seoulapp.ssg.ui.adapter.SsacHistoryRecyclerAdapter;
 import com.seoulapp.ssg.ui.adapter.SsacTipPagerAdapter;
 import com.seoulapp.ssg.ui.adapter.VolunteerRecyclerAdapter;
 
@@ -46,6 +47,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private SsacTipPagerAdapter tipPagerAdapter;
     private VolunteerRecyclerAdapter volunteerRecyclerAdapter;
+    String mName, mProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +122,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         Glide
                 .with(this)
                 .load(profilePath)
+                .placeholder(R.drawable.ic_profile_none)
                 .bitmapTransform(new CropCircleTransformation(this))
                 .into(ivProfile);
         TextView tvProfile = (TextView) nav_header_view.findViewById(R.id.tv_user_name);
@@ -160,10 +163,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(i);
                 break;
             case R.id.nav_setting:
-                // intent i = new intent(MainActivity.this, )
-
+                Intent it = new Intent(MainActivity.this, ProfileChActivity.class);
+                it.putExtra("profile_picture", mProfile);
+                it.putExtra("profile_name", mName);
                 break;
-
+            case R.id.nav_sak_history:
+                Intent intent = new Intent(MainActivity.this, MySsacHistoryActivity.class);
+                startActivity(intent);
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

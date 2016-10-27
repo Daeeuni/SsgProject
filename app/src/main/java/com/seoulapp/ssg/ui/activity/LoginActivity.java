@@ -6,7 +6,6 @@ package com.seoulapp.ssg.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.util.Linkify;
 import android.util.Log;
@@ -42,7 +41,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = LoginActivity.class.getSimpleName();
     private CallbackManager mCallbackManager;
     private SessionCallback kakaoCallback;
@@ -85,7 +84,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Session.getCurrentSession().addCallback(kakaoCallback);
         Session.getCurrentSession().checkAndImplicitOpen();
 
-
     }
 
     private void redirectMainActivity() {
@@ -120,12 +118,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 @Override
                 public void onNotSignedUp() {
+                    Log.e(TAG, "onNotSignedUp: ");
                 }
 
                 @Override
                 public void onSuccess(UserProfile userProfile) {
+                    Log.e(TAG, "onSuccess: " + userProfile.toString());
                     Bundle bundle = new Bundle();
-
+                    String mName = userProfile.getNickname();
+                    String mProfile = userProfile.getThumbnailImagePath();
+                    bundle.putString("name", mName);
+                    bundle.putString("profile", mProfile);
                     LoginDialog loginDialog = new LoginDialog();
                     loginDialog.setArguments(bundle);
                     loginDialog.show(getSupportFragmentManager(), null);

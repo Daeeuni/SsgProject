@@ -49,7 +49,6 @@ public class SsgGalleryActivity extends BaseActivity implements View.OnClickList
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         mAdapter = new SsgGalleryRecyclerAdapter(this);
-//        mAdapter.setOnSsgItemClick(this);
         recyclerView.setAdapter(mAdapter);
 
         SsgApiService service = ServiceGenerator.getInstance().createService(SsgApiService.class);

@@ -65,7 +65,7 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
             tvSpotDetail.setText(ssg.spotDetail);
             tvSsgDate.setText(ssg.date);
             tvSsgComment.setText(ssg.comment);
-            btnEraseSsg.setText("지워주세요\n" + ssg.declareCount);
+            btnEraseSsg.setText("지워주세요!\n" + ssg.declareCount);
 
             Glide
                     .with(getContext())

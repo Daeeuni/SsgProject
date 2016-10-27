@@ -10,5 +10,6 @@
     <color name="app_body_text_1">#35437F</color>
 
     <color name="drawer_body_text_1">#313131</color>
-
+    <color name="ssg_erase_btn_non_clicked">#105282</color>
+    <color name="ssg_erase_btn_clicked">#367caf</color>
 </resources>
