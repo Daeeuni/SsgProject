@@ -3,60 +3,63 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@android:color/white"
     android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="130dp"
-            android:layout_height="115dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="120dp"
-            android:background="@drawable/logo" />
+            android:src="@drawable/logo" />
     </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="4"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
+        <Button
+            android:id="@+id/kakao_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@color/colorPrimary"
+            android:text="카카오톡으로 로그인"
+            android:textColor="#535353"
+            android:textSize="24dp" />
 
         <com.kakao.usermgmt.LoginButton
             android:id="@+id/com_kakao_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="72px"
-            android:layout_marginRight="72px"
-            android:layout_marginTop="60dp" />
+            android:layout_marginBottom="20dp"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/facebook_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="72px"
-            android:layout_marginRight="72px"
-            android:layout_marginTop="72px"
-            android:layout_weight="2"
             android:background="@color/colorPrimary"
             android:text="페이스북으로 로그인"
             android:textColor="#535353"
-            android:textSize="58.33px" />
-
+            android:textSize="24dp" />
 
         <TextView
             android:id="@+id/tvLinkify"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="72px"
-            android:layout_marginRight="72px"
+            android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            android:textColor="#000000" />
+            android:textColor="@android:color/black" />
 
     </LinearLayout>
 </LinearLayout>

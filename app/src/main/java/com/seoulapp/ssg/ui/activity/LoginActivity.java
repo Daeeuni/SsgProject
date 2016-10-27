@@ -5,7 +5,6 @@ package com.seoulapp.ssg.ui.activity;
  */
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -23,19 +22,16 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.kakao.auth.ErrorCode;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
+import com.kakao.usermgmt.LoginButton;
 import com.kakao.usermgmt.UserManagement;
-import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.usermgmt.callback.MeResponseCallback;
 import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
+import com.kakao.util.helper.log.Logger;
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.ui.dialog.LoginDialog;
 
@@ -49,22 +45,18 @@ import java.util.regex.Pattern;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = LoginActivity.class.getSimpleName();
     private CallbackManager mCallbackManager;
-    private SessionCallback callback;
+    private SessionCallback kakaoCallback;
 
     private LoginDialog loginDialog;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
-    private Button btnFacebook;
+    private Button btnFacebook, btnCustomKakaoLogin;
+    private LoginButton btnKakaoLogin;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext()); // SDK 초기화 (setContentView 보다 먼저 실행되어야합니다. 안그럼 에러납니다.)
-        mCallbackManager = CallbackManager.Factory.create();  //로그인 응답을 처리할 콜백 관리자
+        mCallbackManager = CallbackManager.Factory.create();  // 페이스북 로그인 응답을 처리할 콜백 관리자
 
         LoginManager.getInstance().registerCallback(mCallbackManager, mCallback);
         setContentView(R.layout.activity_login);
@@ -83,58 +75,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Pattern pattern1 = Pattern.compile("이용약관 및 개인정보 취급방침");
 
         Linkify.addLinks(tvLinkify, pattern1, "http://naver.com", null, mTransform);
+        btnKakaoLogin = (LoginButton) findViewById(R.id.com_kakao_login);
         btnFacebook = (Button) findViewById(R.id.facebook_login);
         btnFacebook.setOnClickListener(this);
+        btnCustomKakaoLogin = (Button) findViewById(R.id.kakao_login);
+        btnCustomKakaoLogin.setOnClickListener(this);
 
-        UserManagement.requestLogout(new LogoutResponseCallback() {
-            @Override
-            public void onCompleteLogout() {
-                //로그아웃 성공 후 하고싶은 내용 코딩 ~
-            }
-        });
-
-        callback = new SessionCallback();
-        Session.getCurrentSession().addCallback(callback);
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-    }
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("Login Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
+        kakaoCallback = new SessionCallback();
+        Session.getCurrentSession().addCallback(kakaoCallback);
+        Session.getCurrentSession().checkAndImplicitOpen();
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
     }
 
     private void redirectMainActivity() {
@@ -173,12 +124,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 @Override
                 public void onSuccess(UserProfile userProfile) {
-                    Log.e(TAG, "onSuccess: 여기까지 들어옴");
-                    Log.e(TAG, "UserProfle : " + userProfile);
                     Bundle bundle = new Bundle();
-                    Log.e(TAG, "nickname: " + userProfile.getNickname());
-                    bundle.putString("name", userProfile.getNickname());
-                    bundle.putString("profile", userProfile.getThumbnailImagePath());
 
                     LoginDialog loginDialog = new LoginDialog();
                     loginDialog.setArguments(bundle);
@@ -190,7 +136,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         @Override
         public void onSessionOpenFailed(KakaoException exception) {
-            // 세션 연결이 실패했을때
+            if (exception != null) {
+                Logger.e(exception);
+            }
         }
     }
 
@@ -201,13 +149,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.facebook_login:
                 openFacebookSession();
                 break;
+            case R.id.kakao_login:
+                btnKakaoLogin.callOnClick();
+                break;
         }
     }
 
     private void openFacebookSession() {
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
     }
-
 
     private FacebookCallback<LoginResult> mCallback = new FacebookCallback<LoginResult>() {
         @Override
@@ -259,12 +209,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //간편로그인시 호출 ,없으면 간편로그인시 로그인 성공화면으로 넘어가지 않음
         if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Session.getCurrentSession().removeCallback(kakaoCallback);
 
     }
 }
