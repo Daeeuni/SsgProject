@@ -15,6 +15,9 @@
     <string name="txt_info_phone">연락처</string>
     <string name="txt_info_email">E-mail</string>
 
+    <string name="login_kakao">카카오톡으로 로그인</string>
+    <string name="login_facebook">페이스북으로 로그인</string>
+
     <string-array name="upload_picture_methods">
         <item>카메라</item>
         <item>갤러리</item>

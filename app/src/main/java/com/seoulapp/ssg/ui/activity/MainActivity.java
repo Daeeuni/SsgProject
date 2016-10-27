@@ -112,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+
         View nav_header_view = navigationView.getHeaderView(0);
 
         ImageView ivProfile = (ImageView) nav_header_view.findViewById(R.id.iv_profile_picture);
@@ -157,8 +159,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(i);
                 break;
             case R.id.nav_setting:
-               // intent i = new intent(MainActivity.this, )
+                //intent i2 = new intent(MainActivity.this, )
 
+                break;
+            case R.id.nav_ssg_history:
+                Intent i3 = new Intent(MainActivity.this, SsgHistoryActivity.class);
+                //i3.putExtra("myinfoParcel", 보내줄 객체);
+                startActivity(i3);
+                break;
+
+            case R.id.nav_sak_history:
+                //Intent i4 = new Intent(MainActivity.this, )
+                //i4.putExtr("myinfoParcel", 보내줄 객체)
+                //startActivity(i);
                 break;
 
         }

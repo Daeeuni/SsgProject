@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Pattern pattern1 = Pattern.compile("이용약관 및 개인정보 취급방침");
 
         Linkify.addLinks(tvLinkify, pattern1, "http://naver.com", null, mTransform);
-        btnFacebook = (Button) findViewById(R.id.facebook_login);
+        btnFacebook = (Button) findViewById(R.id.btn_facebook_login);
         btnFacebook.setOnClickListener(this);
 //        loginButton = (LoginButton) findViewById(R.id.facebook_login); //페이스북 로그인 버튼
         //유저 정보, 친구정보, 이메일 정보등을 수집하기 위해서는 허가(퍼미션)를 받아야 합니다.

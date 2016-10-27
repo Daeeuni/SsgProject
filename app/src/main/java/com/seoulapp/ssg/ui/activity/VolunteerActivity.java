@@ -160,18 +160,4 @@ public class VolunteerActivity extends AppCompatActivity {
             join_botton.invalidate();
     }
 
-
-
-    /*
-    private void setCurrentInflateItem(int type){
-        if(type==0){
-            mPager.setCurrentItem(0);
-        }else if(type==1){
-            mPager.setCurrentItem(1);
-        }else{
-            mPager.setCurrentItem(2);
-        }
-    }
-    */
-
 }
