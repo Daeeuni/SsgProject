@@ -17,10 +17,10 @@ public class SsgSettingActivity extends BaseActivity implements View.OnClickList
 
     private static final String TAG = SsgSettingActivity.class.getSimpleName();
 
+
     protected void onCreate(Bundle savedInstaceState) {
         super.onCreate(savedInstaceState);
         setContentView(R.layout.activity_setting);
-
         //이름 바꿈 profileButton > btn_profile_change
         Button btn_profile_change = (Button) findViewById(R.id.btn_profile_change);
         Button btn_policy_agreement = (Button) findViewById(R.id.btn_policy_agreement);
@@ -42,12 +42,13 @@ public class SsgSettingActivity extends BaseActivity implements View.OnClickList
 
             case R.id.btn_policy_agreement:
                 intent = new Intent(SsgSettingActivity.this, PolicyAgreementActivity.class);
+                intent.putExtra("agreement", PolicyAgreementActivity.POLICY_AGREEMENT);
                 startActivity(intent);
                 break;
 
             case R.id.btn_personal_info:
-                Log.d(TAG, "onClick: 여기는 와야지");
-                intent = new Intent(SsgSettingActivity.this, PersonalInfoActivity.class);
+                intent = new Intent(SsgSettingActivity.this, PolicyAgreementActivity.class);
+                intent.putExtra("agreement", PolicyAgreementActivity.PERSONAL_INFO);
                 startActivity(intent);
                 break;
         }

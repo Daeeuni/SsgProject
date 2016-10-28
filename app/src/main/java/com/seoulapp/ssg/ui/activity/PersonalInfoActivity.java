@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,8 +19,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_personal_info);
-        Log.d(TAG, "onCreate: ");
+        setContentView(R.layout.activity_agreement);
         Intent intent = getIntent();
 
         content = (TextView) findViewById(R.id.txt_content);

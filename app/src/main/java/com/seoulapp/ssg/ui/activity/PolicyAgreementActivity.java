@@ -14,19 +14,35 @@ public class PolicyAgreementActivity extends AppCompatActivity {
 
     private TextView content;
     private Button confirm;
+    private int check;
+
+
+    public static final int POLICY_AGREEMENT = 0;
+    public static final int PERSONAL_INFO= 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_policy_agreement);
+        setContentView(R.layout.activity_agreement);
         Intent intent = getIntent();
+        String source;
+
+        if(intent.hasExtra("agreement")){ // 인텐트에 값이 있는지 없는 체크
+            check = intent.getExtras().getInt("agreement");
+        } else {
+            // 없을 때 처리
+        }
+
+        if(check == POLICY_AGREEMENT) {
+            source = String.valueOf(Html.fromHtml(getResources().getString(R.string.policy_agreement)));
+
+        } else {
+            source = String.valueOf(Html.fromHtml(getResources().getString(R.string.personal_info)));
+        }
 
         content = (TextView) findViewById(R.id.txt_content);
         confirm = (Button) findViewById(R.id.btn_confirm);
-
-        content.setText(Html.fromHtml(getResources().getString(R.string.policy_agreement)));
-        //flag 부분이 이해가 잘 안됨. 24api 이상부터는 fromhtml(String) 대체
-
+        content.setText(source);
         confirm.setOnClickListener(new View.OnClickListener() {
 
             @Override
