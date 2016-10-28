@@ -25,6 +25,21 @@ public class Ssg {
     public String picture;
 
     public User user;
+
+    @SerializedName("like_cnt")
+    public byte wantRemove;
+
+    public boolean wantRemove() {
+        return wantRemove != 0;
+    }
+
+    public void setWantRemove(boolean want) {
+        if (want){
+            wantRemove = 1;
+        } else{
+            wantRemove = 0;
+        }
+    }
 }
 
 

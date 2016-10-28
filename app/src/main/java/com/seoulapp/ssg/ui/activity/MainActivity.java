@@ -25,12 +25,11 @@ import com.seoulapp.ssg.listener.RecyclerItemClickListener;
 import com.seoulapp.ssg.model.Model;
 import com.seoulapp.ssg.model.Volunteer;
 import com.seoulapp.ssg.network.ServiceGenerator;
-import com.seoulapp.ssg.ui.adapter.SsacHistoryRecyclerAdapter;
 import com.seoulapp.ssg.ui.adapter.SsacTipPagerAdapter;
 import com.seoulapp.ssg.ui.adapter.VolunteerRecyclerAdapter;
 
-import me.relex.circleindicator.CircleIndicator;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import me.relex.circleindicator.CircleIndicator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -157,19 +156,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+        Intent intent;
         switch (id) {
             case R.id.nav_ssg_gallery:
-                Intent i = new Intent(MainActivity.this, SsgGalleryActivity.class);
-                startActivity(i);
-                break;
-            case R.id.nav_setting:
-                Intent it = new Intent(MainActivity.this, ProfileChActivity.class);
-                it.putExtra("profile_picture", mProfile);
-                it.putExtra("profile_name", mName);
-                break;
-            case R.id.nav_sak_history:
-                Intent intent = new Intent(MainActivity.this, MySsacHistoryActivity.class);
+                intent = new Intent(MainActivity.this, SsgGalleryActivity.class);
                 startActivity(intent);
+                break;
+
+            case R.id.nav_sak_history:
+                intent = new Intent(MainActivity.this, MySsacHistoryActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.nav_setting:
+                intent = new Intent(MainActivity.this, SsgSettingActivity.class);
+                startActivity(intent);
+                break;
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
