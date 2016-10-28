@@ -27,9 +27,15 @@
         <item>위치가 틀려요</item>
     </string-array>
 
+    <string name="login_kakao">카카오톡으로 로그인</string>
+    <string name="login_facebook">페이스북으로 로그인</string>
+
     <string-array name="upload_picture_methods">
         <item>카메라</item>
         <item>갤러리</item>
     </string-array>
 
+    <string name="btn_setting_profie">프로필 변경</string>
+    <string name="btn_setting_policy_agreement">이용약관</string>
+    <string name="btn_setting_personal_info">개인정보 취급방침</string>
 </resources>

@@ -5,62 +5,45 @@
     android:background="@android:color/white"
     android:orientation="vertical">
 
-    <FrameLayout
+    <Button
+        android:id="@+id/btn_profile_change"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3">
-
-        <Button
-            android:id="@+id/profile_change"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:onClick="onClick"
-            android:text="프로필 변경"
-            android:textColor="@color/drawer_body_text_1"
-            android:textSize="30dp" />
-
-    </FrameLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/white"
+        android:onClick="onClick"
+        android:text="@string/btn_setting_profie"
+        android:textColor="@color/drawer_body_text_1"
+        android:textSize="@dimen/setting_text_size" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#dcdcdc" />
 
-    <FrameLayout
+    <Button
+        android:id="@+id/btn_policy_agreement"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3">
-
-        <Button
-            android:id="@+id/eula_page"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:text="이용약관"
-            android:textColor="@color/drawer_body_text_1"
-            android:textSize="30dp" />
-    </FrameLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/white"
+        android:text="@string/btn_setting_policy_agreement"
+        android:textColor="@color/drawer_body_text_1"
+        android:textSize="@dimen/setting_text_size" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#dcdcdc" />
 
-    <FrameLayout
+    <Button
+        android:id="@+id/btn_personal_info"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3">
-
-        <Button
-            android:id="@+id/privacy_page"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:text="개인정보 취급방침"
-            android:textColor="@color/drawer_body_text_1"
-            android:textSize="30dp" />
-
-    </FrameLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/white"
+        android:text="@string/btn_setting_personal_info"
+        android:textColor="@color/drawer_body_text_1"
+        android:textSize="@dimen/setting_text_size" />
 
 </LinearLayout>

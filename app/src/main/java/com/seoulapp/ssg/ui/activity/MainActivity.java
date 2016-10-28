@@ -115,6 +115,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         View nav_header_view = navigationView.getHeaderView(0);
 
         ImageView ivProfile = (ImageView) nav_header_view.findViewById(R.id.iv_profile_picture);
@@ -161,6 +162,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_ssg_gallery:
                 intent = new Intent(MainActivity.this, SsgGalleryActivity.class);
                 startActivity(intent);
+
+                break;
+
+            case R.id.nav_ssg_history:
+                intent = new Intent(MainActivity.this, SsgHistoryActivity.class);
+                startActivity(intent);
+
                 break;
 
             case R.id.nav_sak_history:
@@ -170,6 +178,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
             case R.id.nav_setting:
                 intent = new Intent(MainActivity.this, SsgSettingActivity.class);
+                intent.putExtra("profile_picture", mProfile);
+                intent.putExtra("profile_name", mName);
                 startActivity(intent);
                 break;
         }

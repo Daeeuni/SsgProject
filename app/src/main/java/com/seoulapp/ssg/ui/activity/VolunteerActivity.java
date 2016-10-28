@@ -30,11 +30,12 @@ import retrofit2.Response;
 /**
  * Created by Boram Moon on 2016-10-05.
  */
-public class VolunteerActivity extends AppCompatActivity {
+public class VolunteerActivity extends BaseActivity {
 
     private static final String TAG = VolunteerActivity.class.getSimpleName();
-    private TextView join_textView;
-    private Button join_botton;
+    private TextView tv_volunteer_title;
+    private TextView tv_volunteer_content;
+    private Button btn_volunteer_join;
     private ArrayAdapter<String> adapter;
     private ViewPager mPager;
     private VolunteerApiService v_service;
@@ -56,21 +57,29 @@ public class VolunteerActivity extends AppCompatActivity {
         pics.add(volParcel.getPicture());
         v_pageAdapter = new VolunteerPagerAdapter(VolunteerActivity.this);
 
-        join_textView = (TextView) findViewById(R.id.join_textView);
-        join_botton = (Button) findViewById(R.id.join_button);
-        mPager = (ViewPager) findViewById(R.id.pager);
+        tv_volunteer_title = (TextView) findViewById(R.id.tv_volunteer_title);
+        tv_volunteer_content = (TextView) findViewById(R.id.tv_volunteer_content);
+        btn_volunteer_join = (Button) findViewById(R.id.btn_volunteer_join);
+        mPager = (ViewPager) findViewById(R.id.pager_volunteer);
         mPager.setAdapter(v_pageAdapter);
         v_pageAdapter.additems(pics);
 
-        join_textView.append(v_title[0] + " : " + volParcel.getVolunteerTitle() + "\n");
-        join_textView.append(v_title[1] + " : " + volParcel.getSchedule() + "\n");
-        join_textView.append(v_title[2] + " : " + volParcel.getTime() + "\n");
-        join_textView.append(v_title[3] + " : " + volParcel.getSpot() + "\n");
-        join_textView.append(v_title[4] + " : " + volParcel.getMeeting_location() + "\n");
-        join_textView.append(v_title[5] + " : " + volParcel.getTotal_volunteer() + "/" + volParcel.getRecruitment() + "\n");
-        join_textView.append(v_title[6] + " : " + volParcel.getDetail_info()+ "\n");
 
-        join_botton.setOnClickListener(new View.OnClickListener() {
+
+        for(int i = 0; i<v_title.length; i++){
+            tv_volunteer_title.append(v_title[i] + "\n\n");
+        }
+
+        tv_volunteer_content.append(volParcel.getVolunteerTitle() +
+                "\n\n" + volParcel.getSchedule() +
+                "\n\n" + volParcel.getTime() +
+                "\n\n" + volParcel.getSpot() +
+                "\n\n" + volParcel.getMeeting_location() +
+                "\n\n" + volParcel.getTotal_volunteer() + " / " + volParcel.getRecruitment() +
+                "\n\n" + volParcel.getDetail_info());
+
+
+        btn_volunteer_join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Dialog dialog_check = new Dialog(VolunteerActivity.this);
@@ -117,7 +126,7 @@ public class VolunteerActivity extends AppCompatActivity {
                                     public void onResponse(Call<Model> call, Response<Model> response) {
                                         if(response.isSuccessful()) {
                                             if(response.body().getCode() == 200) {
-                                                setBntJoin(join_botton);
+                                                setBntJoin(btn_volunteer_join);
                                             }
                                         }
                                     }
@@ -151,23 +160,9 @@ public class VolunteerActivity extends AppCompatActivity {
     }
 
     public void setBntJoin(View v) {
-            join_botton.setBackgroundColor(ContextCompat.getColor(v.getContext(), R.color.btnChanged));
-            join_botton.setText("참가신청 완료");
-            join_botton.invalidate();
+        btn_volunteer_join.setBackgroundColor(ContextCompat.getColor(v.getContext(), R.color.btnChanged));
+        btn_volunteer_join.setText("참가신청 완료");
+        btn_volunteer_join.invalidate();
     }
-
-
-
-    /*
-    private void setCurrentInflateItem(int type){
-        if(type==0){
-            mPager.setCurrentItem(0);
-        }else if(type==1){
-            mPager.setCurrentItem(1);
-        }else{
-            mPager.setCurrentItem(2);
-        }
-    }
-    */
 
 }

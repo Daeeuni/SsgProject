@@ -40,7 +40,6 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = LoginActivity.class.getSimpleName();
     private CallbackManager mCallbackManager;
@@ -74,10 +73,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         Pattern pattern1 = Pattern.compile("이용약관 및 개인정보 취급방침");
 
         Linkify.addLinks(tvLinkify, pattern1, "http://naver.com", null, mTransform);
+        btnFacebook = (Button) findViewById(R.id.btn_facebook_login);
         btnKakaoLogin = (LoginButton) findViewById(R.id.com_kakao_login);
-        btnFacebook = (Button) findViewById(R.id.facebook_login);
         btnFacebook.setOnClickListener(this);
-        btnCustomKakaoLogin = (Button) findViewById(R.id.kakao_login);
+        btnCustomKakaoLogin = (Button) findViewById(R.id.btn_kakao_login);
         btnCustomKakaoLogin.setOnClickListener(this);
 
         kakaoCallback = new SessionCallback();
@@ -149,10 +148,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
-            case R.id.facebook_login:
+            case R.id.btn_facebook_login:
                 openFacebookSession();
                 break;
-            case R.id.kakao_login:
+            case R.id.btn_kakao_login:
                 btnKakaoLogin.callOnClick();
                 break;
         }
