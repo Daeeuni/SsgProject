@@ -1,10 +1,14 @@
 package com.seoulapp.ssg.api;
 
 import com.seoulapp.ssg.model.Model;
+import com.seoulapp.ssg.model.Ssg;
 import com.seoulapp.ssg.model.SsgModel;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
@@ -18,4 +22,8 @@ public interface SsgApiService {
 
     @GET("gallery")
     Call<SsgModel> getSsgGallery(@Query("page") int page);
+
+    @FormUrlEncoded
+    @POST("like_toggle")
+    Call<Ssg> requestSsgRemove(@Field("gid") int gid, @Field("uid") int uid);
 }
