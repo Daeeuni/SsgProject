@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.seoulapp.ssg.R;
 
-public class PersonalInfoActivity extends AppCompatActivity {
+public class PersonalInfoActivity extends BaseActivity {
     private static final String TAG = PersonalInfoActivity.class.getSimpleName();
 
     private TextView content;

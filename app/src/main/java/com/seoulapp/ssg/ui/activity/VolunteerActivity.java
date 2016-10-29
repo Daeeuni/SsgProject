@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +19,7 @@ import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.VolunteerApiService;
 import com.seoulapp.ssg.model.Model;
 import com.seoulapp.ssg.model.User;
-import com.seoulapp.ssg.model.Volunteer;
+import com.seoulapp.ssg.model.Ssac;
 import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.adapter.VolunteerPagerAdapter;
 
@@ -34,7 +36,19 @@ public class VolunteerActivity extends BaseActivity {
 
     private static final String TAG = VolunteerActivity.class.getSimpleName();
     private TextView tv_volunteer_title;
-    private TextView tv_volunteer_content;
+    private TextView tv_volunteer_title_content;
+    private TextView tv_volunteer_date;
+    private TextView tv_volunteer_date_content;
+    private TextView tv_volunteer_schedule;
+    private TextView tv_volunteer_schedule_content;
+    private TextView tv_volunteer_place;
+    private TextView tv_volunteer_place_content;
+    private TextView tv_volunteer_meetingpoint;
+    private TextView tv_volunteer_meetingpoint_content;
+    private TextView tv_volunteer_total;
+    private TextView tv_volunteer_total_content;
+    private TextView tv_volunteer_detail;
+    private TextView tv_volunteer_detail_content;
     private Button btn_volunteer_join;
     private ArrayAdapter<String> adapter;
     private ViewPager mPager;
@@ -42,8 +56,8 @@ public class VolunteerActivity extends BaseActivity {
     private VolunteerPagerAdapter v_pageAdapter;
 
     private ArrayList<String> pics;
-    private String[] v_title = {"제목", "날짜", "봉사시간", "활동장소", "집합장소", "모집인원",  "상세설명"};
-    Volunteer volParcel;
+    private String[] v_title = {"제목", "날짜", "봉사시간", "활동장소", "집합장소", "모집인원", "상세설명"};
+    Ssac volParcel;
     User user;
 
     @Override
@@ -51,35 +65,58 @@ public class VolunteerActivity extends BaseActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_volunteer);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            setTitle("");
+        }
+
         Intent intent = getIntent();
         volParcel = intent.getParcelableExtra("volunteerParcel");
         pics = new ArrayList<>();
-        pics.add(volParcel.getPicture());
+        pics.add(volParcel.getThumbnail());
         v_pageAdapter = new VolunteerPagerAdapter(VolunteerActivity.this);
 
         tv_volunteer_title = (TextView) findViewById(R.id.tv_volunteer_title);
-        tv_volunteer_content = (TextView) findViewById(R.id.tv_volunteer_content);
+        tv_volunteer_title_content = (TextView) findViewById(R.id.tv_volunteer_title_content);
+        tv_volunteer_date = (TextView) findViewById(R.id.tv_volunteer_date);
+        tv_volunteer_date_content = (TextView) findViewById(R.id.tv_volunteer_date_content);
+        tv_volunteer_schedule = (TextView) findViewById(R.id.tv_volunteer_schedule);
+        tv_volunteer_schedule_content = (TextView) findViewById(R.id.tv_volunteer_schedule_content);
+        tv_volunteer_place = (TextView) findViewById(R.id.tv_volunteer_place);
+        tv_volunteer_place_content = (TextView) findViewById(R.id.tv_volunteer_place_content);
+        tv_volunteer_meetingpoint = (TextView) findViewById(R.id.tv_volunteer_meetingpoint);
+        tv_volunteer_meetingpoint_content = (TextView) findViewById(R.id.tv_volunteer_meetingpoint_content);
+        tv_volunteer_total = (TextView) findViewById(R.id.tv_volunteer_total);
+        tv_volunteer_total_content = (TextView) findViewById(R.id.tv_volunteer_total_content);
+        tv_volunteer_detail = (TextView) findViewById(R.id.tv_volunteer_detail);
+        tv_volunteer_detail_content = (TextView) findViewById(R.id.tv_volunteer_detail_content);
+
         btn_volunteer_join = (Button) findViewById(R.id.btn_volunteer_join);
         mPager = (ViewPager) findViewById(R.id.pager_volunteer);
         mPager.setAdapter(v_pageAdapter);
         v_pageAdapter.additems(pics);
 
+        tv_volunteer_title.append(v_title[0]);
+        tv_volunteer_date.append(v_title[1]);
+        tv_volunteer_schedule.append(v_title[2]);
+        tv_volunteer_place.append(v_title[3]);
+        tv_volunteer_meetingpoint.append(v_title[4]);
+        tv_volunteer_total.append(v_title[5]);
+        tv_volunteer_detail.append(v_title[6]);
 
+        tv_volunteer_title_content.append(volParcel.getVolunteerTitle());
+        tv_volunteer_date_content.append(volParcel.getSchedule());
+        tv_volunteer_schedule_content.append(volParcel.getTime());
+        tv_volunteer_place_content.append(volParcel.getSpot());
+        tv_volunteer_meetingpoint_content.append(volParcel.getMeeting_location());
+        tv_volunteer_total_content.append(volParcel.getTotal_volunteer() + " / " + volParcel.getRecruitment());
+        tv_volunteer_detail_content.append(volParcel.getDetail_info());
 
-        for(int i = 0; i<v_title.length; i++){
-            tv_volunteer_title.append(v_title[i] + "\n\n");
-        }
-
-        tv_volunteer_content.append(volParcel.getVolunteerTitle() +
-                "\n\n" + volParcel.getSchedule() +
-                "\n\n" + volParcel.getTime() +
-                "\n\n" + volParcel.getSpot() +
-                "\n\n" + volParcel.getMeeting_location() +
-                "\n\n" + volParcel.getTotal_volunteer() + " / " + volParcel.getRecruitment() +
-                "\n\n" + volParcel.getDetail_info());
-
-
-        btn_volunteer_join.setOnClickListener(new View.OnClickListener() {
+        btn_volunteer_join.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Dialog dialog_check = new Dialog(VolunteerActivity.this);
@@ -95,7 +132,7 @@ public class VolunteerActivity extends BaseActivity {
 
                 Button dialogButton = (Button) dialog_check.findViewById(R.id.btn_dialog_OK);
                 // if button is clicked, close the custom dialog
-                dialogButton.setOnClickListener(new View.OnClickListener() {
+                dialogButton.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // custom dialog
@@ -115,7 +152,7 @@ public class VolunteerActivity extends BaseActivity {
                         // set the custom dialog components - text, image and button
 
 
-                        btn_info_ok.setOnClickListener(new View.OnClickListener() {
+                        btn_info_ok.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 int uid = 1;
@@ -124,8 +161,8 @@ public class VolunteerActivity extends BaseActivity {
                                 call.enqueue(new Callback<Model>() {
                                     @Override
                                     public void onResponse(Call<Model> call, Response<Model> response) {
-                                        if(response.isSuccessful()) {
-                                            if(response.body().getCode() == 200) {
+                                        if (response.isSuccessful()) {
+                                            if (response.body().getCode() == 200) {
                                                 setBntJoin(btn_volunteer_join);
                                             }
                                         }
@@ -141,7 +178,7 @@ public class VolunteerActivity extends BaseActivity {
                             }
                         });
 
-                        btn_info_cancel.setOnClickListener(new View.OnClickListener() {
+                        btn_info_cancel.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 dialog_info.dismiss();
@@ -157,6 +194,12 @@ public class VolunteerActivity extends BaseActivity {
         });
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==android.R.id.home){ finish(); }
+        return super.onOptionsItemSelected(item);
     }
 
     public void setBntJoin(View v) {

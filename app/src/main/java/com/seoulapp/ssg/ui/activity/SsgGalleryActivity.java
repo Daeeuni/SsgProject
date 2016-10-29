@@ -1,5 +1,6 @@
 package com.seoulapp.ssg.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,10 +12,14 @@ import android.view.View;
 
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.SsgApiService;
+import com.seoulapp.ssg.model.Ssg;
 import com.seoulapp.ssg.model.SsgModel;
 import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.adapter.SsgGalleryRecyclerAdapter;
 import com.seoulapp.ssg.util.DividerItemDecoration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,6 +35,7 @@ public class SsgGalleryActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ssg_gallery);
+        Intent intent = getIntent();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -51,28 +57,37 @@ public class SsgGalleryActivity extends BaseActivity implements View.OnClickList
         mAdapter = new SsgGalleryRecyclerAdapter(this);
         recyclerView.setAdapter(mAdapter);
 
-        SsgApiService service = ServiceGenerator.getInstance().createService(SsgApiService.class);
+        if (intent.hasExtra("ssg")) {
+            Ssg ssg = intent.getParcelableExtra("ssg");
+            List<Ssg> list = new ArrayList<>();
+            list.add(ssg);
+            mAdapter.addItems(list);
 
-        Call<SsgModel> call = service.getSsgGallery(1);
+        } else {
+            SsgApiService service = ServiceGenerator.getInstance().createService(SsgApiService.class);
 
-        call.enqueue(new Callback<SsgModel>() {
-            @Override
-            public void onResponse(Call<SsgModel> call, Response<SsgModel> response) {
-                if (response.isSuccessful()) {
-                    if (response.body().code == 200) {
-                        mAdapter.addItems(response.body().ssgs);
-                        if (response.body().last) {
-                            isLast = response.body().last;
+            Call<SsgModel> call = service.getSsgGallery(1);
+
+            call.enqueue(new Callback<SsgModel>() {
+                @Override
+                public void onResponse(Call<SsgModel> call, Response<SsgModel> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body().code == 200) {
+                            mAdapter.addItems(response.body().ssgs);
+                            if (response.body().last) {
+                                isLast = response.body().last;
+                            }
                         }
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<SsgModel> call, Throwable t) {
-                Log.d(TAG, "onFailure: " + t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(Call<SsgModel> call, Throwable t) {
+                    Log.d(TAG, "onFailure: " + t.getMessage());
+                }
+            });
+        }
+
 
     }
 

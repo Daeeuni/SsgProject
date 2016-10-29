@@ -19,12 +19,12 @@
         tools:replace="android:icon,android:theme,android:label">
         <activity
             android:name=".ui.activity.MainActivity"
-            android:label="" >
+            android:label="">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <meta-data
@@ -52,7 +52,7 @@
         <activity android:name=".ui.activity.SsgGalleryActivity" />
         <activity android:name=".ui.activity.PolicyAgreementActivity" />
         <activity android:name=".ui.activity.PersonalInfoActivity" />
-        <activity android:name=".ui.activity.SsgHistoryActivity"/>
+        <activity android:name=".ui.activity.MySsgHistoryActivity" />
         <activity
             android:name=".ui.activity.ReportActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />

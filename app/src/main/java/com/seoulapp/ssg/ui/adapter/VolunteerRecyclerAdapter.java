@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.seoulapp.ssg.R;
-import com.seoulapp.ssg.model.Volunteer;
+import com.seoulapp.ssg.model.Ssac;
 import com.seoulapp.ssg.ui.adapter.basic.BasicRecyclerAdapter;
 import com.seoulapp.ssg.ui.adapter.viewholder.BasicViewHolder;
 
@@ -21,13 +21,13 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
  * Created by Dongyoon on 2016. 10. 3..
  */
 
-public class VolunteerRecyclerAdapter extends BasicRecyclerAdapter<Volunteer> {
+public class VolunteerRecyclerAdapter extends BasicRecyclerAdapter<Ssac> {
 
     public VolunteerRecyclerAdapter(Context context) {
         super(context);
     }
 
-    public VolunteerRecyclerAdapter(Context context, List<Volunteer> items) {
+    public VolunteerRecyclerAdapter(Context context, List<Ssac> items) {
         super(context, items);
     }
 
@@ -38,7 +38,7 @@ public class VolunteerRecyclerAdapter extends BasicRecyclerAdapter<Volunteer> {
         return new VolunteerViewHolder(inflater.inflate(R.layout.item_ssac_mini, parent, false));
     }
 
-    private class VolunteerViewHolder extends BasicViewHolder<Volunteer> {
+    private class VolunteerViewHolder extends BasicViewHolder<Ssac> {
         TextView tvVolunteerName;
         ImageView ivVolunteerSpot;
 
@@ -49,11 +49,11 @@ public class VolunteerRecyclerAdapter extends BasicRecyclerAdapter<Volunteer> {
         }
 
         @Override
-        public void onBindView(Volunteer volunteer) {
-            tvVolunteerName.setText(volunteer.getSpot());
+        public void onBindView(Ssac ssac) {
+            tvVolunteerName.setText(ssac.getSpot());
             Glide
                     .with(getContext())
-                    .load(volunteer.getThumbnail())
+                    .load(ssac.getThumbnail())
                     .centerCrop()
                     .bitmapTransform(new CropCircleTransformation(getContext()))
                     .into(ivVolunteerSpot);

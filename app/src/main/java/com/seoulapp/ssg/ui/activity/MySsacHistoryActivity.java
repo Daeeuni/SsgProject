@@ -5,7 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.seoulapp.ssg.R;
-import com.seoulapp.ssg.model.Volunteer;
+import com.seoulapp.ssg.model.Ssac;
 import com.seoulapp.ssg.ui.adapter.SsacHistoryRecyclerAdapter;
 
 import java.util.ArrayList;
@@ -24,9 +24,9 @@ public class MySsacHistoryActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mAdapter);
 
-        ArrayList<Volunteer> items = new ArrayList<>();
+        ArrayList<Ssac> items = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            Volunteer item = new Volunteer();
+            Ssac item = new Ssac();
             item.setMeeting_location("경복궁");
             item.setSchedule("11월 13일");
             item.setTime("13:00 ~ 18:00");

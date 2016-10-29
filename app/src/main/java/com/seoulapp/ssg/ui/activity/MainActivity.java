@@ -23,9 +23,8 @@ import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.SsgApiService;
 import com.seoulapp.ssg.listener.RecyclerItemClickListener;
 import com.seoulapp.ssg.model.Model;
-import com.seoulapp.ssg.model.Volunteer;
+import com.seoulapp.ssg.model.Ssac;
 import com.seoulapp.ssg.network.ServiceGenerator;
-import com.seoulapp.ssg.ui.adapter.SsacHistoryRecyclerAdapter;
 import com.seoulapp.ssg.ui.adapter.SsacTipPagerAdapter;
 import com.seoulapp.ssg.ui.adapter.VolunteerRecyclerAdapter;
 
@@ -104,9 +103,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                Volunteer volunteer = volunteerRecyclerAdapter.getItem(position);
+                                Ssac ssac = volunteerRecyclerAdapter.getItem(position);
                                 Intent intent = new Intent(MainActivity.this, VolunteerActivity.class);
-                                intent.putExtra("volunteerParcel", volunteer);
+                                intent.putExtra("volunteerParcel", ssac);
                                 startActivity(intent);
                             }
                         }
@@ -142,7 +141,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             public void onResponse(Call<Model> call, Response<Model> response) {
 
                 if (response.isSuccessful()) {
-                    volunteerRecyclerAdapter.addItems(response.body().volunteers);
+                    volunteerRecyclerAdapter.addItems(response.body().ssacs);
                     tipPagerAdapter.addItems(response.body().ssacTips);
                     circleIndicator.setViewPager(ssacPager);
                 }
@@ -166,7 +165,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
 
             case R.id.nav_ssg_history:
-                intent = new Intent(MainActivity.this, SsgHistoryActivity.class);
+                intent = new Intent(MainActivity.this, MySsgHistoryActivity.class);
                 startActivity(intent);
                 break;
 

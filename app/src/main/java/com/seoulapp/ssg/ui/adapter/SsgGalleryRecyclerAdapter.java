@@ -37,7 +37,7 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
     @Override
     public BasicViewHolder getViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = getLayoutInflater();
-
+        parent.setBackgroundResource(R.color.colorPrimary);
         return new GalleryViewHolder(inflater.inflate(R.layout.item_ssg_gallery, parent, false));
     }
 
@@ -57,7 +57,6 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
             btnReportSsg = (TextView) itemView.findViewById(R.id.btn_report_ssg);
             btnEraseSsg.setOnClickListener(this);
             btnReportSsg.setOnClickListener(this);
-
         }
 
         @Override

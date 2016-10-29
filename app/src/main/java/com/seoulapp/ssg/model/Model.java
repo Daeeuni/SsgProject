@@ -16,9 +16,12 @@ public class Model {
     public ArrayList<SsacTip> ssacTips;
 
     @SerializedName("volunteer_list")
-    public ArrayList<Volunteer> volunteers;
+    public ArrayList<Ssac> ssacs;
     public User user;
-
+/*
+    @SerializedName("my_ssg")
+    public ArrayList<Ssg> my_ssg_history;
+*/
     public int getCode() {
         return code;
     }
