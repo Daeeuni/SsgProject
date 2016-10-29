@@ -30,8 +30,22 @@ public class Ssg implements Parcelable{
     public String picture;
     public User user;
 
-    public Ssg(){
+    @SerializedName("like_cnt")
+    public byte wantRemove;
 
+    public boolean wantRemove() {
+        return wantRemove != 0;
+    }
+
+    public void setWantRemove(boolean want) {
+        if (want){
+            wantRemove = 1;
+        } else{
+            wantRemove = 0;
+        }
+    }
+
+    public Ssg(){
     }
 
     public Ssg(Parcel source){

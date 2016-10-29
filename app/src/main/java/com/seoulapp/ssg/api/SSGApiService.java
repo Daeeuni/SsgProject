@@ -1,6 +1,7 @@
 package com.seoulapp.ssg.api;
 
 import com.seoulapp.ssg.model.Model;
+import com.seoulapp.ssg.model.Ssg;
 import com.seoulapp.ssg.model.SsgModel;
 
 import retrofit2.Call;
@@ -25,4 +26,7 @@ public interface SsgApiService {
     @FormUrlEncoded
     @POST("my_ssg")
     Call<SsgModel> getMySsgHistory(@Field("uid") int user_id);
+
+    @POST("like_toggle")
+    Call<Ssg> requestSsgRemove(@Field("gid") int gid, @Field("uid") int uid);
 }

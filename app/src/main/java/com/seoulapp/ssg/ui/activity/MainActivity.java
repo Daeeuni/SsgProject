@@ -28,8 +28,8 @@ import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.adapter.SsacTipPagerAdapter;
 import com.seoulapp.ssg.ui.adapter.VolunteerRecyclerAdapter;
 
-import me.relex.circleindicator.CircleIndicator;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import me.relex.circleindicator.CircleIndicator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -162,11 +162,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_ssg_gallery:
                 intent = new Intent(MainActivity.this, SsgGalleryActivity.class);
                 startActivity(intent);
+
                 break;
 
             case R.id.nav_ssg_history:
                 intent = new Intent(MainActivity.this, MySsgHistoryActivity.class);
                 startActivity(intent);
+
                 break;
 
             case R.id.nav_sak_history:

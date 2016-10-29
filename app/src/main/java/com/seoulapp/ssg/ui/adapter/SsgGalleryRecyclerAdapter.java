@@ -12,10 +12,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.seoulapp.ssg.R;
+import com.seoulapp.ssg.api.SsgApiService;
 import com.seoulapp.ssg.model.Ssg;
+import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.adapter.basic.BasicRecyclerAdapter;
 import com.seoulapp.ssg.ui.adapter.viewholder.BasicViewHolder;
 import com.seoulapp.ssg.ui.dialog.SsgReportDialog;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Dongyoon on 2016. 10. 19..
@@ -64,7 +70,7 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
             tvSpotDetail.setText(ssg.spotDetail);
             tvSsgDate.setText(ssg.date);
             tvSsgComment.setText(ssg.comment);
-            btnEraseSsg.setText("지워주세요!\n" + ssg.declareCount);
+            btnEraseSsg.setText("지워주세요!\n" + ssg.likeCount);
 
             Glide
                     .with(getContext())
@@ -77,14 +83,47 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
         public void onClick(View view) {
             int id = view.getId();
             int position = getAdapterPosition();
-            if (id == R.id.btn_remove_ssg) {
-                if (mCallback != null) {
-                    mCallback.onEraseClick(position);
-                }
-            } else if (id == R.id.btn_report_ssg) {
-                showReportDialog(isReported);
-            }
+            switch (id) {
+                case R.id.btn_report_ssg:
+                    if (id == R.id.btn_remove_ssg) {
+                        if (mCallback != null) {
+                            mCallback.onEraseClick(position);
+                        }
+                    } else if (id == R.id.btn_report_ssg) {
+                        showReportDialog(isReported);
+                    }
+                    break;
+                case R.id.btn_remove_ssg:
+                    requestRemoveSsg((Ssg)getItem(position));
+                    break;
 
+            }
+        }
+
+        private void requestRemoveSsg(Ssg item) {
+            SsgApiService service = ServiceGenerator.getInstance().createService(SsgApiService.class);
+            Call<Ssg> call = service.requestSsgRemove(item.ssgId, 1);
+            call.enqueue(new Callback<Ssg>() {
+                @Override
+                public void onResponse(Call<Ssg> call, Response<Ssg> response) {
+                    if(response.isSuccessful()){
+                        setBtnRemove(response.body().wantRemove());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Ssg> call, Throwable t) {
+
+                }
+            });
+        }
+
+        private void setBtnRemove(boolean b) {
+            if(b){
+                btnEraseSsg.setBackgroundColor(getContext().getResources().getColor(R.color.ssg_erase_btn_clicked));
+            } else {
+                btnEraseSsg.setBackgroundColor(getContext().getResources().getColor(R.color.ssg_erase_btn_non_clicked));
+            }
         }
 
         private void showReportDialog(boolean isReported) {
