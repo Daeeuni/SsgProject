@@ -45,6 +45,8 @@ public class SsacTipPagerAdapter extends PagerAdapter {
         tv_tip_title.setText(tip.title);
         tv_tip_subtitle.setText(tip.subTitle);
         Glide.with(context).load(tip.thumbnail).into(iv_tip_thumbnail);
+
+
         ((ViewPager) container).addView(itemView);
 
         return itemView;

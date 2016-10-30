@@ -6,8 +6,10 @@ package com.seoulapp.ssg.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.text.util.Linkify;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -37,14 +39,13 @@ import com.seoulapp.ssg.widget.CustomLoginButton;
 import org.json.JSONObject;
 
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = LoginActivity.class.getSimpleName();
     private CallbackManager mCallbackManager;
     private SessionCallback kakaoCallback;
-
+    private TextView agreement;
+    private ClickableSpan clickSpan, clickSpan2;
     private LoginDialog loginDialog;
     private CustomLoginButton btnFacebook, btnCustomKakaoLogin;
     private LoginButton btnKakaoLogin;
@@ -60,6 +61,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         LoginManager.getInstance().registerCallback(mCallbackManager, mCallback);
         setContentView(R.layout.activity_login);
 
+
+/*
         TextView tvLinkify = (TextView) findViewById(R.id.tvLinkify);
 
         String text = "회원가입을 함으로써 쓱싹의 이용약관 및 개인정보 취급방침에 동의합니다.";
@@ -71,9 +74,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 return "";
             }
         };
-        Pattern pattern1 = Pattern.compile("이용약관 및 개인정보 취급방침");
+        Pattern pattern1 = Pattern.compile("이용약관");
 
         Linkify.addLinks(tvLinkify, pattern1, "http://naver.com", null, mTransform);
+*/
         btnFacebook = (CustomLoginButton) findViewById(R.id.btn_facebook_login);
         btnKakaoLogin = (LoginButton) findViewById(R.id.com_kakao_login);
         btnFacebook.setOnClickListener(this);
@@ -83,10 +87,39 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         kakaoCallback = new SessionCallback();
         Session.getCurrentSession().addCallback(kakaoCallback);
         Session.getCurrentSession().checkAndImplicitOpen();
+        clickSpan = new ClickableSpan() {
+
+            @Override
+            public void onClick(View widget) {
+                Intent i = new Intent(LoginActivity.this, PolicyAgreementActivity.class);
+                i.putExtra("agreement", PolicyAgreementActivity.POLICY_AGREEMENT);
+                startActivity(i);
+            }
+        };
+
+        clickSpan2 = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                Intent i = new Intent(LoginActivity.this, PolicyAgreementActivity.class);
+                i.putExtra("agreement", PolicyAgreementActivity.PERSONAL_INFO);
+                startActivity(i);
+            }
+        };
+
+        SpannableStringBuilder sp = new SpannableStringBuilder(
+                "회원가입을 함으로써 쓱싹의 이용약관 및 개인정보 취급방침에 동의합니다.");
+
+        sp.setSpan(clickSpan, 15, 19, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sp.setSpan(clickSpan2, 22, 31, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        agreement = (TextView) findViewById(R.id.tvLinkify);
+        agreement.setMovementMethod(LinkMovementMethod.getInstance());
+        agreement.setText(sp);
+
+
 
     }
 
-    private void redirectMainActivity() {
+    private void redirectLoginDialog() {
         startActivity(new Intent(this, LoginDialog.class));
         finish();
     }
@@ -107,7 +140,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     if (result == ErrorCode.CLIENT_ERROR_CODE) {
                         finish();
                     } else {
-                        redirectMainActivity();
+                        redirectLoginDialog();
                     }
                 }
 
@@ -123,12 +156,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 @Override
                 public void onSuccess(UserProfile userProfile) {
-                    Log.e(TAG, "onSuccess: " + userProfile.toString());
                     Bundle bundle = new Bundle();
                     String mName = userProfile.getNickname();
                     String mProfile = userProfile.getThumbnailImagePath();
+                    String mKakaoId = String.valueOf(userProfile.getId());
+                    bundle.putString("social_id", mKakaoId);
                     bundle.putString("name", mName);
                     bundle.putString("profile", mProfile);
+                    bundle.putString("join_type", "K");
+
                     LoginDialog loginDialog = new LoginDialog();
                     loginDialog.setArguments(bundle);
                     loginDialog.show(getSupportFragmentManager(), null);
@@ -164,9 +200,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private FacebookCallback<LoginResult> mCallback = new FacebookCallback<LoginResult>() {
         @Override
-        public void onSuccess(LoginResult loginResult) {
+        public void onSuccess(final LoginResult loginResult) {
+
             Log.e(TAG, "onSuccess: accessToken = " + loginResult.getAccessToken().getToken());
-            final String profile = "https://graph.facebook.com/" + loginResult.getAccessToken().getUserId() + "/picture?type=normal";
+            final String mProfile = "https://graph.facebook.com/" + loginResult.getAccessToken().getUserId() + "/picture?type=normal";
 
             GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                 @Override
@@ -175,20 +212,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         //handle error
                         Log.e(TAG, "onCompleted: geError " + response.getError().toString());
                     } else {
-                        String email = object.optString("email");
-                        String id = object.optString("id");
-                        String name = object.optString("name");
-                        if (TextUtils.isEmpty(email)) {
+                        Bundle bundle = new Bundle();
+                        String mEmail = object.optString("email");
+                        String mFacebookid = object.optString("id");
+                        String mName = object.optString("name");
+                        String mToken = loginResult.getAccessToken().getToken();
+
+                        bundle.putString("social_id", mFacebookid);
+                        bundle.putString("profile", mProfile);
+                        bundle.putString("name", mName);
+                        bundle.putString("email",mEmail);
+                        bundle.putString("join_type", "F");
+                        bundle.putString("token", mToken);
+
+                        /*if (TextUtils.isEmpty(email)) {
                             email = "";
                         }
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString("name", name);
-                        bundle.putString("email", email);
-                        bundle.putString("profile", profile);
+*/
                         loginDialog = new LoginDialog();
                         loginDialog.setArguments(bundle);
-                        loginDialog.show(getSupportFragmentManager(), "login");
+                        loginDialog.show(getSupportFragmentManager(), null);
                     }
                 }
             });

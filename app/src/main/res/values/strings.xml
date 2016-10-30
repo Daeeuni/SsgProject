@@ -7,8 +7,9 @@
     <string name="openDrawer">open</string>
     <string name="closeDrawer">close</string>
     <string name="facebook_app_id">987608598035369</string>
+
+    <!--<string name="kakao_app_key">2cf8730d5c7336be327d17935824e2b7</string>-->
     <string name="kakao_app_key">2cf8730d5c7336be327d17935824e2b7</string>
-    <!--<string name="kakao_app_key">7DwX1AkSBzC8QBuqtKMLRQy5ca8=</string>-->
     <string name="daum_map_api_key">086d411dcd6aa3cf97603426475cf601</string>
 
 
@@ -38,4 +39,6 @@
     <string name="btn_setting_profie">프로필 변경</string>
     <string name="btn_setting_policy_agreement">이용약관</string>
     <string name="btn_setting_personal_info">개인정보 취급방침</string>
+
+    <string name="tv_profile_changed">이메일이 전송되었습니다.</string>
 </resources>
