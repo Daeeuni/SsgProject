@@ -6,10 +6,17 @@ package com.seoulapp.ssg;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.util.Base64;
+import android.util.Log;
 
 import com.kakao.auth.KakaoSDK;
 import com.seoulapp.ssg.ui.adapter.KakaoSDKAdapter;
 import com.tsengvn.typekit.Typekit;
+
+import java.security.MessageDigest;
 
 /**
  * 이미지를 캐시를 앱 수준에서 관리하기 위한 애플리케이션 객체이다.
@@ -35,6 +42,25 @@ public class SsgApplication extends Application {
                 .addCustom5(Typekit.createFromAsset(this, "SeoulHangangL.otf"));
 
         KakaoSDK.init(new KakaoSDKAdapter());
+
+        getAppKeyHash();
+
+    }
+
+    private void getAppKeyHash() {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md;
+                md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String something = new String(Base64.encode(md.digest(), 0));
+                Log.d("Hash key", something);
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            Log.e("name not found", e.toString());
+        }
     }
 
     public static Activity getCurrentActivity() {

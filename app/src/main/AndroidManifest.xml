@@ -19,7 +19,9 @@
         tools:replace="android:icon,android:theme,android:label">
         <activity
             android:name=".ui.activity.MainActivity"
-            android:label="" />
+            android:label="">
+
+        </activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -40,6 +42,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <meta-data

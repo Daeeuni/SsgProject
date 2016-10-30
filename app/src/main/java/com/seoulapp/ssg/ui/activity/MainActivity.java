@@ -70,6 +70,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         tipPagerAdapter = new SsacTipPagerAdapter(this);
         ssacPager.setAdapter(tipPagerAdapter);
 
+        ssacPager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SsgTipActivity.class);
+                startActivity(intent);
+            }
+
+        } );
+
+
 
         Button btnSsgReport = (Button) findViewById(R.id.btn_ssg_report);
         btnSsgReport.setOnClickListener(new View.OnClickListener() {

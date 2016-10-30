@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.seoulapp.ssg.R;
@@ -76,14 +80,52 @@ public class LoginDialog extends DialogFragment {
         editEmail.setText(mEmail);
         ivProfile = (ImageView) v.findViewById(R.id.profile_picture);
 
+        editName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+                if(s.length() > 0){
+                    mName = s.toString();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        editEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+                if(s.length() > 0) {
+                    mEmail = s.toString();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         Glide.with(this).load(mProfile).into(ivProfile);
 
         Button SignupButton = (Button) v.findViewById(R.id.edit_login);
         SignupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LoginDialog.this.dismiss();
-//                Log.d(TAG, "sicialId : " + mSocialId +" mJoinType: " + mJoinType );
+//                LoginDialog.this.dismiss();
+              Log.d(TAG, "name : " + mName +" email : " + mEmail + "socialid + "+ mSocialId);
                 signIn();
             }
         });
@@ -94,6 +136,11 @@ public class LoginDialog extends DialogFragment {
 
     private void signIn() {
         UserService service = ServiceGenerator.getInstance().createService(UserService.class);
+
+        if(mName == null || TextUtils.isEmpty(mName) || mEmail == null || TextUtils.isEmpty(mEmail)) {
+            Toast.makeText(getActivity(), "이름과 이메일은 필수 입력 사항입니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         Call<Model> call = service.signUp(mSocialId, mEmail, mName, mProfile, mJoinType, mAccessToken);
         call.enqueue(new Callback<Model>() {
@@ -117,11 +164,11 @@ public class LoginDialog extends DialogFragment {
     }
 
     private void redirectMainActivity() {
-
         Intent intent = new Intent(getActivity(), MainActivity.class);
         intent.putExtra("profile_picture", mProfile);
         intent.putExtra("profile_name", mName);
         startActivity(intent);
+        dismiss();
 
 
     }
