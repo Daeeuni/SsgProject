@@ -43,7 +43,7 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
     @Override
     public BasicViewHolder getViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = getLayoutInflater();
-
+        parent.setBackgroundResource(R.color.colorPrimary);
         return new GalleryViewHolder(inflater.inflate(R.layout.item_ssg_gallery, parent, false));
     }
 
@@ -51,7 +51,6 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
         ImageView ivSsgPicture;
         TextView tvSpotDetail, tvSsgDate, tvSsgComment, btnReportSsg;
         Button btnEraseSsg;
-        boolean isReported;
 
         public GalleryViewHolder(View itemView) {
             super(itemView);
@@ -63,7 +62,6 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
             btnReportSsg = (TextView) itemView.findViewById(R.id.btn_report_ssg);
             btnEraseSsg.setOnClickListener(this);
             btnReportSsg.setOnClickListener(this);
-
         }
 
         @Override
@@ -71,7 +69,8 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
             tvSpotDetail.setText(ssg.spotDetail);
             tvSsgDate.setText(ssg.date);
             tvSsgComment.setText(ssg.comment);
-            btnEraseSsg.setText("지워주세요!\n" + ssg.likeCount);
+            setLikeBtn(ssg.isLike(), ssg.likeCount);
+            setReportBtn(ssg.isDeclare());
 
             Glide
                     .with(getContext())
@@ -80,35 +79,61 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
                     .into(ivSsgPicture);
         }
 
+        private void setLikeBtn(boolean like, int likeCount) {
+            btnEraseSsg.setText("지워주세요!\n" + likeCount);
+            if (like) {
+                btnEraseSsg.setBackgroundColor(getContext().getResources().getColor(R.color.ssg_erase_btn_clicked));
+            } else {
+                btnEraseSsg.setBackgroundColor(getContext().getResources().getColor(R.color.ssg_erase_btn_non_clicked));
+            }
+        }
+
+        private void setReportBtn(boolean b) {
+            if (b) {
+                btnReportSsg.setTextColor(getContext().getResources().getColor(R.color.btnChanged));
+                btnReportSsg.setCompoundDrawablesWithIntrinsicBounds(getContext().getResources().getDrawable(R.drawable.ic_church_bell_red), null, null, null);
+            } else {
+                btnReportSsg.setTextColor(getContext().getResources().getColor(android.R.color.black));
+                btnReportSsg.setCompoundDrawablesWithIntrinsicBounds(getContext().getResources().getDrawable(R.drawable.ic_church_bell_black), null, null, null);
+            }
+        }
+
         @Override
         public void onClick(View view) {
             int id = view.getId();
             int position = getAdapterPosition();
+            Ssg ssg = (Ssg) getItem(position);
             switch (id) {
                 case R.id.btn_report_ssg:
-                    if (id == R.id.btn_remove_ssg) {
-                        if (mCallback != null) {
-                            mCallback.onEraseClick(position);
-                        }
-                    } else if (id == R.id.btn_report_ssg) {
-                        showReportDialog(isReported);
-                    }
+                    showReportDialog(ssg.isDeclare());
                     break;
                 case R.id.btn_remove_ssg:
-                    requestRemoveSsg((Ssg)getItem(position));
+                    btnEraseSsg.setClickable(false);
+                    requestSsgLike(ssg);
                     break;
 
             }
         }
 
-        private void requestRemoveSsg(Ssg item) {
+        private void requestSsgLike(final Ssg item) {
             SsgApiService service = ServiceGenerator.getInstance().createService(SsgApiService.class);
-            Call<Ssg> call = service.requestSsgRemove(item.ssgId, 1);
+            Call<Ssg> call = service.like(item.ssgId, 1);
             call.enqueue(new Callback<Ssg>() {
                 @Override
                 public void onResponse(Call<Ssg> call, Response<Ssg> response) {
-                    if(response.isSuccessful()){
-                        setBtnRemove(response.body().wantRemove());
+                    if (response.isSuccessful()) {
+                        if(response.body().isLike()) {
+                            item.likeCount += 1;
+                            item.isLike = 1;
+                        } else {
+                            item.likeCount -= 1;
+                            item.isLike = 0;
+                            item.like = null;
+                        }
+
+                        setLikeBtn(response.body().isLike(), item.likeCount);
+                        btnEraseSsg.setClickable(true);
+
                     }
                 }
 
@@ -119,12 +144,30 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
             });
         }
 
-        private void setBtnRemove(boolean b) {
-            if(b){
-                btnEraseSsg.setBackgroundColor(getContext().getResources().getColor(R.color.ssg_erase_btn_clicked));
-            } else {
-                btnEraseSsg.setBackgroundColor(getContext().getResources().getColor(R.color.ssg_erase_btn_non_clicked));
-            }
+        private void requestSsgDeclare(final Ssg item) {
+            SsgApiService service = ServiceGenerator.getInstance().createService(SsgApiService.class);
+            Call<Ssg> call = service.declare(item.ssgId, 1);
+            call.enqueue(new Callback<Ssg>() {
+                @Override
+                public void onResponse(Call<Ssg> call, Response<Ssg> response) {
+                    if(response.isSuccessful()) {
+                        if(response.body().isDeclare()) {
+                            item.isDeclare = 1;
+                            setReportBtn(true);
+                        } else {
+                            item.isDeclare = 0;
+                            item.declare = null;
+                            setReportBtn(false);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Ssg> call, Throwable t) {
+
+                }
+            });
+
         }
 
         private void showReportDialog(boolean isReported) {
@@ -140,16 +183,9 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
 
         @Override
         public void onOkClick() {
-            if (!isReported) {
-                isReported = true;
-                btnReportSsg.setTextColor(getContext().getResources().getColor(R.color.btnChanged));
-                btnReportSsg.setCompoundDrawablesWithIntrinsicBounds(getContext().getResources().getDrawable(R.drawable.ic_church_bell_red), null, null, null);
-            } else {
-                isReported = false;
-                btnReportSsg.setTextColor(getContext().getResources().getColor(android.R.color.black));
-                btnReportSsg.setCompoundDrawablesWithIntrinsicBounds(getContext().getResources().getDrawable(R.drawable.ic_church_bell_black), null, null, null);
+            Ssg ssg = (Ssg)getItem(getAdapterPosition());
+            requestSsgDeclare(ssg);
 
-            }
         }
     }
 

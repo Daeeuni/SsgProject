@@ -1,7 +1,6 @@
 package com.seoulapp.ssg.ui.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
@@ -10,7 +9,7 @@ import android.widget.TextView;
 
 import com.seoulapp.ssg.R;
 
-public class PersonalInfoActivity extends AppCompatActivity {
+public class PersonalInfoActivity extends BaseActivity {
     private static final String TAG = PersonalInfoActivity.class.getSimpleName();
 
     private TextView content;

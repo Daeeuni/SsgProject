@@ -33,26 +33,27 @@
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
-        <Button
+        <com.seoulapp.ssg.widget.CustomLoginButton
             android:id="@+id/btn_kakao_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:text="@string/login_kakao"
-            android:textColor="#535353"
-            android:textSize="19dp"
-            app:font="custom5" />
+            android:gravity="center"
+            app:bg="@drawable/login_kakao_bg"
+            app:font="custom4"
+            app:symbol="@drawable/ic_kakao_symbol"
+            app:text="카카오톡으로 로그인"
+            app:textColor="@color/colorKaKaoText" />
 
-        <Button
+        <com.seoulapp.ssg.widget.CustomLoginButton
             android:id="@+id/btn_facebook_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:background="@color/colorPrimary"
-            android:text="@string/login_facebook"
-            android:textColor="#535353"
-            android:textSize="19dp"
-            app:font="custom5" />
+            app:bg="@drawable/login_facebook_bg"
+            app:font="custom4"
+            app:symbol="@drawable/ic_facebook_symbol"
+            app:text="페이스북으로 로그인"
+            app:textColor="@color/colorFacebookText" />
 
         <TextView
             android:id="@+id/tvLinkify"

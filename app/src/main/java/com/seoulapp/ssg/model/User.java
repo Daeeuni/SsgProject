@@ -1,8 +1,5 @@
 package com.seoulapp.ssg.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -21,6 +18,10 @@ public class User {
 
     @SerializedName("uid")
     private int user_num;
+
+    private String nickname;
+
+    private String profile;
 
     public User() {
     }
@@ -41,4 +42,19 @@ public class User {
 
     public String getPhone_num() { return phone_num; }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
 }

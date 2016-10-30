@@ -1,7 +1,6 @@
 package com.seoulapp.ssg.ui.adapter;
 
 import android.content.Context;
-import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -9,10 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import java.util.ArrayList;
-
 import com.bumptech.glide.Glide;
 import com.seoulapp.ssg.R;
+import com.seoulapp.ssg.model.Photo;
+
+import java.util.ArrayList;
 
 
 /**
@@ -23,7 +23,7 @@ public class VolunteerPagerAdapter extends PagerAdapter {
 
     private LayoutInflater mInflater;
     private Context mContext;
-    private ArrayList<String> pics;
+    private ArrayList<Photo> pics;
 
     public VolunteerPagerAdapter(Context c) {
         super();
@@ -31,7 +31,7 @@ public class VolunteerPagerAdapter extends PagerAdapter {
         mInflater = LayoutInflater.from(c);
     }
 
-    public void additems(ArrayList<String> items) {
+    public void additems(ArrayList<Photo> items) {
         pics = items;
         notifyDataSetChanged();
     }
@@ -48,8 +48,8 @@ public class VolunteerPagerAdapter extends PagerAdapter {
         v = mInflater.inflate(R.layout.item_volunteer_img, null);
         ivVolunteer = (ImageView) v.findViewById(R.id.iv_volunteer_img);
 
-        String photoUrl = pics.get(position);
-        Glide.with(container.getContext()).load(pics.get(0)).into(ivVolunteer);
+        String photoUrl = pics.get(position).picture;
+        Glide.with(container.getContext()).load(photoUrl).into(ivVolunteer);
 
         ((ViewPager)container).addView(v);
 

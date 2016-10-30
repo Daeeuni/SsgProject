@@ -14,6 +14,6 @@ public class SsgModel {
     public String msg;
     public boolean last;
 
-    @SerializedName("gallery_list")
+    @SerializedName(value = "ssgs", alternate = {"my_ssg", "gallery_list"})
     public ArrayList<Ssg> ssgs;
 }

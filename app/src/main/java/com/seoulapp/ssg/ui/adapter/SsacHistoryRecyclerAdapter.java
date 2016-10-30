@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.seoulapp.ssg.R;
-import com.seoulapp.ssg.model.Volunteer;
+import com.seoulapp.ssg.model.Ssac;
 import com.seoulapp.ssg.ui.adapter.basic.BasicRecyclerAdapter;
 import com.seoulapp.ssg.ui.adapter.viewholder.BasicViewHolder;
 
@@ -26,7 +26,7 @@ public class SsacHistoryRecyclerAdapter extends BasicRecyclerAdapter {
         return new SsacHistoryViewHolder(inflater.inflate(R.layout.item_ssac_list, parent, false));
     }
 
-    private class SsacHistoryViewHolder extends BasicViewHolder<Volunteer> {
+    private class SsacHistoryViewHolder extends BasicViewHolder<Ssac> {
         private TextView tvDate, tvLocation, tvTime;
 
         public SsacHistoryViewHolder(View itemView) {
@@ -38,7 +38,7 @@ public class SsacHistoryRecyclerAdapter extends BasicRecyclerAdapter {
         }
 
         @Override
-        public void onBindView(Volunteer ssac) {
+        public void onBindView(Ssac ssac) {
             tvLocation.setText(ssac.getMeeting_location());
             tvDate.setText(ssac.getSchedule());
             tvTime.setText(ssac.getTime());

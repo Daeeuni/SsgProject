@@ -1,10 +1,9 @@
 package com.seoulapp.ssg.api;
 
 import com.seoulapp.ssg.model.Model;
-import com.seoulapp.ssg.model.User;
+import com.seoulapp.ssg.model.Ssac;
 
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -20,4 +19,8 @@ public interface VolunteerApiService {
     @FormUrlEncoded
     @POST("volunteer_join")
     Call<Model> joinVolunteer(@Field("vid") int vid, @Field("uid") int uid, @Field("uname") String uname, @Field("uphone") String phoneNumber);
+
+    @FormUrlEncoded
+    @POST("volunteer_picture")
+    Call<Ssac> getSsacPictures(@Field("vid") int vid, @Field("uid") int uid);
 }
