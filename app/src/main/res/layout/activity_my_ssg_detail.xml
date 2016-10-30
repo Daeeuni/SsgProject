@@ -63,29 +63,39 @@
         android:layout_height="1dp"
         android:background="@android:color/black" />
 
-    <Button
-        android:id="@+id/btn_remove_ssg"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@color/ssg_erase_btn_non_clicked"
-        android:lineSpacingExtra="2dp"
-        android:padding="5dp"
-        android:textColor="#E6E2E7"
-        android:textSize="18dp"
-        app:font="custom5"
-        tools:text="지워주세요 \n 1927" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/btn_report_ssg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginBottom="6dp"
-        android:layout_marginTop="6dp"
-        android:drawableLeft="@drawable/ic_church_bell_black"
-        android:gravity="center"
-        android:text="이 게시물 신고하기"
-        android:textColor="@android:color/black"
-        app:font="custom2" />
+        <Button
+            android:id="@+id/btn_adjust"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:background="@color/ssg_erase_btn_non_clicked"
+            android:lineSpacingExtra="2dp"
+            android:padding="5dp"
+            android:layout_marginRight="10dp"
+            android:textColor="#E6E2E7"
+            android:textSize="18dp"
+            app:font="custom5"
+            android:text="게시물 수정" />
+
+        <Button
+            android:id="@+id/btn_remove"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:background="@color/ssg_erase_btn_non_clicked"
+            android:lineSpacingExtra="2dp"
+            android:padding="5dp"
+            android:textColor="#E6E2E7"
+            android:textSize="18dp"
+            app:font="custom5"
+            android:text="게시물 삭제 " />
+    </LinearLayout>
+
 </LinearLayout>

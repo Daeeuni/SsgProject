@@ -3,7 +3,6 @@ package com.seoulapp.ssg.ui.adapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +43,7 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
     @Override
     public BasicViewHolder getViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = getLayoutInflater();
-
+        parent.setBackgroundResource(R.color.colorPrimary);
         return new GalleryViewHolder(inflater.inflate(R.layout.item_ssg_gallery, parent, false));
     }
 
@@ -63,7 +62,6 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
             btnReportSsg = (TextView) itemView.findViewById(R.id.btn_report_ssg);
             btnEraseSsg.setOnClickListener(this);
             btnReportSsg.setOnClickListener(this);
-
         }
 
         @Override
@@ -82,7 +80,6 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
         }
 
         private void setLikeBtn(boolean like, int likeCount) {
-            Log.d("SsgGallery", "like: " + like + " likeCount: " + likeCount);
             btnEraseSsg.setText("지워주세요!\n" + likeCount);
             if (like) {
                 btnEraseSsg.setBackgroundColor(getContext().getResources().getColor(R.color.ssg_erase_btn_clicked));
@@ -101,7 +98,6 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
             }
         }
 
-
         @Override
         public void onClick(View view) {
             int id = view.getId();
@@ -109,10 +105,10 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
             Ssg ssg = (Ssg) getItem(position);
             switch (id) {
                 case R.id.btn_report_ssg:
-                    Log.d("ssgGallery", "onClick: " + ssg.isDeclare());
                     showReportDialog(ssg.isDeclare());
                     break;
                 case R.id.btn_remove_ssg:
+                    btnEraseSsg.setClickable(false);
                     requestSsgLike(ssg);
                     break;
 
@@ -136,6 +132,7 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
                         }
 
                         setLikeBtn(response.body().isLike(), item.likeCount);
+                        btnEraseSsg.setClickable(true);
 
                     }
                 }

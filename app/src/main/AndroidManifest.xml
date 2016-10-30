@@ -19,9 +19,7 @@
         tools:replace="android:icon,android:theme,android:label">
         <activity
             android:name=".ui.activity.MainActivity"
-            android:label="">
-
-        </activity>
+            android:label="" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -52,13 +50,14 @@
         <activity android:name=".ui.activity.SsgGalleryActivity" />
         <activity android:name=".ui.activity.PolicyAgreementActivity" />
         <activity android:name=".ui.activity.PersonalInfoActivity" />
-        <activity android:name=".ui.activity.SsgHistoryActivity" />
+        <activity android:name=".ui.activity.MySsgHistoryActivity" />
         <activity
             android:name=".ui.activity.ReportActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".ui.activity.SsgSettingActivity" />
         <activity android:name=".ui.activity.ProfileChActivity" />
-        <activity android:name=".ui.activity.MySsacHistoryActivity"></activity>
+        <activity android:name=".ui.activity.MySsacHistoryActivity" />
+        <activity android:name=".ui.activity.MySsgDetailActivity"></activity>
     </application>
 
 </manifest>

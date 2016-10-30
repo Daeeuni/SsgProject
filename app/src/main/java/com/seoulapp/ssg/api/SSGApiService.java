@@ -24,8 +24,13 @@ public interface SsgApiService {
     Call<SsgModel> getSsgGallery(@Query("page") int page, @Query("uid") int uid);
 
     @FormUrlEncoded
+    @POST("my_ssg")
+    Call<SsgModel> getMySsgHistory(@Field("uid") int uid);
+
+    @FormUrlEncoded
     @POST("like_toggle")
     Call<Ssg> like(@Field("gid") int gid, @Field("uid") int uid);
+
     @FormUrlEncoded
     @POST("declare_toggle")
     Call<Ssg> declare(@Field("gid") int gid, @Field("uid") int uid);
