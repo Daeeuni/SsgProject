@@ -15,6 +15,9 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +31,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.seoulapp.ssg.R;
+import com.seoulapp.ssg.api.SsgApiService;
+import com.seoulapp.ssg.model.Model;
+import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.dialog.UploadPictureDialog;
 
 import net.daum.mf.map.api.MapPOIItem;
@@ -37,8 +43,17 @@ import net.daum.mf.map.api.MapView;
 
 import java.io.File;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ReportActivity extends BaseActivity implements UploadPictureDialog.OnChoiceClickListener,
         View.OnClickListener, MapView.MapViewEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
+    public static final String API_BASE_URL = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+
     private static final String TAG = ReportActivity.class.getSimpleName();
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 100;
     private UploadPictureDialog mDialog;
@@ -57,6 +72,9 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
     private ScrollView mRootScrollView;
     private EditText editLocationDetail, editComment;
     private MapReverseGeoCoder mReverseGeoCoder = null;
+
+    private String imagePath, locationDetail, comment;
+    private double lat, lng;
 
 
     @Override
@@ -96,6 +114,48 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 mRootScrollView.requestDisallowInterceptTouchEvent(true);
                 return false;
+            }
+        });
+
+        editComment = (EditText) findViewById(R.id.edit_comment);
+        editLocationDetail = (EditText) findViewById(R.id.edit_location);
+
+        editComment.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() > 0) {
+                    comment = charSequence.toString();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        editLocationDetail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() > 0) {
+                    locationDetail = charSequence.toString();
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
 
@@ -147,7 +207,7 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
                 final Bundle extras = data.getExtras();
 
                 if (extras != null) {
-                    String imagePath = mImageCaptureUri.getPath();
+                    imagePath = mImageCaptureUri.getPath();
 
                     Glide.with(this)
                             .load(imagePath)
@@ -192,8 +252,15 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_submit:
-                mReverseGeoCoder = new MapReverseGeoCoder(getString(R.string.daum_map_api_key), mMapView.getMapCenterPoint(), ReportActivity.this, ReportActivity.this);
-                mReverseGeoCoder.startFindingAddress();
+                if (imagePath == null) {
+                    Toast.makeText(ReportActivity.this, "이미지를 추가해주세요", Toast.LENGTH_SHORT).show();
+                } else if (locationDetail == null) {
+                    Toast.makeText(ReportActivity.this, "장소정보를 추가해주세요", Toast.LENGTH_SHORT).show();
+                } else {
+                    mReverseGeoCoder = new MapReverseGeoCoder(getString(R.string.daum_map_api_key), mMapView.getMapCenterPoint(), ReportActivity.this, ReportActivity.this);
+                    mReverseGeoCoder.startFindingAddress();
+                }
+
                 break;
 
             case R.id.btn_cancel:
@@ -288,10 +355,9 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
 
     @Override
     public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
-        double latitude = mapPoint.getMapPointGeoCoord().latitude;
-        double longitude = mapPoint.getMapPointGeoCoord().longitude;
+        lat = mapPoint.getMapPointGeoCoord().latitude;
+        lng = mapPoint.getMapPointGeoCoord().longitude;
 
-        tvMapDescription.setText("위도 : " + longitude + "\n경도 : " + latitude);
         if (mMapPOIItem != null)
             mMapPOIItem.setMapPoint(mapPoint);
     }
@@ -360,5 +426,50 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
 
     private void onFinishReverseGeoCoding(String result) {
         Toast.makeText(ReportActivity.this, "Reverse Geo-coding : " + result, Toast.LENGTH_SHORT).show();
+
+        postImageAndData(imagePath, "1", comment, locationDetail, result, String.valueOf(lat), String.valueOf(lng));
+
+    }
+
+    private void postImageAndData(String filePath, String uid, String comment, String detailLocation, String pname, String lat, String lng) {
+        String path = filePath;
+        File file = new File(path);
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("picture", file.getName(), requestFile);
+
+        RequestBody requestUserId =
+                RequestBody.create(
+                        MediaType.parse("multipart/form-data"), uid);
+        // add another part within the multipart request
+        RequestBody requestComment =
+                RequestBody.create(
+                        MediaType.parse("multipart/form-data"), comment);
+        // add another part within the multipart request
+        RequestBody requestDetailLoca =
+                RequestBody.create(
+                        MediaType.parse("multipart/form-data"), detailLocation);
+        RequestBody requestPname =
+                RequestBody.create(MediaType.parse("multipart/form-data"), pname);
+        RequestBody requestLat = RequestBody.create(MediaType.parse("multipart/form-data"), lat);
+        RequestBody requestLng = RequestBody.create(MediaType.parse("multipart/form-data"), lng);
+
+
+        SsgApiService service = ServiceGenerator.getInstance().createService(SsgApiService.class);
+        service.upload_ssg(body, requestUserId, requestComment, requestDetailLoca, requestPname, requestLat, requestLng).enqueue(new Callback<Model>() {
+            @Override
+            public void onResponse(Call<Model> call, Response<Model> response) {
+                if(response.isSuccessful()) {
+                    Log.d(TAG, "onResponse: fffffff");
+                } else{
+                    Log.d(TAG, "onResponse: " + response.message());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Model> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
     }
 }

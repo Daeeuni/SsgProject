@@ -40,6 +40,16 @@ public class Ssg implements Parcelable{
     @SerializedName("like_cnt")
     public byte isLike;
 
+    private byte isDelete;
+
+    public boolean isDelete() {
+        return isDelete != 0;
+    }
+
+    public void setIsDelete(byte isDelete) {
+        this.isDelete = isDelete;
+    }
+
     public Ssg(){
     }
 
@@ -52,6 +62,8 @@ public class Ssg implements Parcelable{
         lat = source.readDouble();
         lng = source.readDouble();
         date = source.readString();
+        isDelete = source.readByte();
+
     }
 
 
@@ -87,6 +99,7 @@ public class Ssg implements Parcelable{
         dest.writeDouble(lat);
         dest.writeDouble(lng);
         dest.writeString(date);
+        dest.writeByte(isDelete);
     }
 
     public static Creator<Ssg> CREATOR = new Creator<Ssg>() {

@@ -7,8 +7,8 @@
     <string name="openDrawer">open</string>
     <string name="closeDrawer">close</string>
     <string name="facebook_app_id">987608598035369</string>
-    <!--<string name="kakao_app_key">2cf8730d5c7336be327d17935824e2b7</string>-->
-    <string name="kakao_app_key">cfd2e85e23053ed582d6bce5d0ab3630</string>
+    <string name="kakao_app_key">2cf8730d5c7336be327d17935824e2b7</string>
+    <!--<string name="kakao_app_key">7DwX1AkSBzC8QBuqtKMLRQy5ca8=</string>-->
     <string name="daum_map_api_key">086d411dcd6aa3cf97603426475cf601</string>
 
 
