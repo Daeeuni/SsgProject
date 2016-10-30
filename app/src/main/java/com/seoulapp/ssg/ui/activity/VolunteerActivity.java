@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -16,7 +15,6 @@ import android.widget.TextView;
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.VolunteerApiService;
 import com.seoulapp.ssg.model.Model;
-import com.seoulapp.ssg.model.User;
 import com.seoulapp.ssg.model.Volunteer;
 import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.adapter.VolunteerPagerAdapter;
@@ -44,17 +42,13 @@ public class VolunteerActivity extends BaseActivity {
     private ArrayList<String> pics;
     private String[] v_title = {"제목", "날짜", "봉사시간", "활동장소", "집합장소", "모집인원",  "상세설명"};
     Volunteer volParcel;
-    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_volunteer);
         Intent intent = getIntent();
         volParcel = intent.getParcelableExtra("volunteerParcel");
-        pics = new ArrayList<>();
-        pics.add(volParcel.getPicture());
         v_pageAdapter = new VolunteerPagerAdapter(VolunteerActivity.this);
 
         tv_volunteer_title = (TextView) findViewById(R.id.tv_volunteer_title);
@@ -62,9 +56,6 @@ public class VolunteerActivity extends BaseActivity {
         btn_volunteer_join = (Button) findViewById(R.id.btn_volunteer_join);
         mPager = (ViewPager) findViewById(R.id.pager_volunteer);
         mPager.setAdapter(v_pageAdapter);
-        v_pageAdapter.additems(pics);
-
-
 
         for(int i = 0; i<v_title.length; i++){
             tv_volunteer_title.append(v_title[i] + "\n\n");
@@ -77,7 +68,6 @@ public class VolunteerActivity extends BaseActivity {
                 "\n\n" + volParcel.getMeeting_location() +
                 "\n\n" + volParcel.getTotal_volunteer() + " / " + volParcel.getRecruitment() +
                 "\n\n" + volParcel.getDetail_info());
-
 
         btn_volunteer_join.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +103,6 @@ public class VolunteerActivity extends BaseActivity {
                         dialog_info.setTitle("봉사활동 신청 양식");
 
                         // set the custom dialog components - text, image and button
-
 
                         btn_info_ok.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -156,7 +145,22 @@ public class VolunteerActivity extends BaseActivity {
             }
         });
 
+        VolunteerApiService service = ServiceGenerator.getInstance().createService(VolunteerApiService.class);
+        Call<Volunteer> call = service.getVolunteerPictures(volParcel.getVolunteerId());
 
+        call.enqueue(new Callback<Volunteer>() {
+            @Override
+            public void onResponse(Call<Volunteer> call, Response<Volunteer> response) {
+                if(response.isSuccessful()) {
+                    v_pageAdapter.additems(response.body().getPictures());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Volunteer> call, Throwable t) {
+
+            }
+        });
     }
 
     public void setBntJoin(View v) {

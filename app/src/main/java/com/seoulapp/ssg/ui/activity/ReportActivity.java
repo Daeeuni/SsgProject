@@ -19,10 +19,12 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.seoulapp.ssg.R;
@@ -30,12 +32,13 @@ import com.seoulapp.ssg.ui.dialog.UploadPictureDialog;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapReverseGeoCoder;
 import net.daum.mf.map.api.MapView;
 
 import java.io.File;
 
 public class ReportActivity extends BaseActivity implements UploadPictureDialog.OnChoiceClickListener,
-        View.OnClickListener, MapView.MapViewEventListener {
+        View.OnClickListener, MapView.MapViewEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
     private static final String TAG = ReportActivity.class.getSimpleName();
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 100;
     private UploadPictureDialog mDialog;
@@ -53,6 +56,8 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
     private TextView tvMapDescription;
     private ScrollView mRootScrollView;
     private EditText editLocationDetail, editComment;
+    private MapReverseGeoCoder mReverseGeoCoder = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +98,12 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
                 return false;
             }
         });
+
+        Button btnSubmit = (Button) findViewById(R.id.btn_submit);
+        Button btnCancel = (Button) findViewById(R.id.btn_cancel);
+
+        btnSubmit.setOnClickListener(this);
+        btnCancel.setOnClickListener(this);
 
     }
 
@@ -180,6 +191,14 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.btn_submit:
+                mReverseGeoCoder = new MapReverseGeoCoder(getString(R.string.daum_map_api_key), mMapView.getMapCenterPoint(), ReportActivity.this, ReportActivity.this);
+                mReverseGeoCoder.startFindingAddress();
+                break;
+
+            case R.id.btn_cancel:
+                finish();
+                break;
         }
     }
 
@@ -329,5 +348,17 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
 
     }
 
+    @Override
+    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
 
+    }
+
+    @Override
+    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
+        onFinishReverseGeoCoding(s);
+    }
+
+    private void onFinishReverseGeoCoding(String result) {
+        Toast.makeText(ReportActivity.this, "Reverse Geo-coding : " + result, Toast.LENGTH_SHORT).show();
+    }
 }

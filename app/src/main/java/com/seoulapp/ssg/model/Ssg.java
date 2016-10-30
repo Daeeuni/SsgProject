@@ -26,36 +26,33 @@ public class Ssg {
 
     public User user;
 
+    public Like like;
+
+    public Declare declare;
+
+    @SerializedName("declare_cnt")
+    public byte isDeclare;
+
     @SerializedName("like_cnt")
-    public byte wantRemove;
+    public byte isLike;
 
-    public boolean wantRemove() {
-        return wantRemove != 0;
+
+
+    public class Like {
+        public int like_cnt;
     }
 
-    public void setWantRemove(boolean want) {
-        if (want){
-            wantRemove = 1;
-        } else{
-            wantRemove = 0;
-        }
+    public class Declare {
+        public int declare_cnt;
     }
+
+    public boolean isDeclare() {
+        return declare != null && declare.declare_cnt == 1 || isDeclare == 1;
+    }
+
+    public boolean isLike() {
+        return like != null && like.like_cnt == 1 || isLike == 1;
+    }
+
 }
 
-
-/*
-"gallery_list": [
-        {
-        "gid": 9,
-        "picture": "http://52.78.115.250:9000/1/gyeongbok.jpg",
-        "pname": "경복궁",
-        "detail_location": "작은 기둥",
-        "comment": "경복궁 낙서",
-        "total_like": 0,
-        "total_declare": 0,
-        "create_date": "2016-09-06",
-        "user": {
-        "nickname": "Jay Park"
-        }
-        }
-        */

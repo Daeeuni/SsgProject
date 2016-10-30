@@ -25,6 +25,7 @@ public class SsgGalleryActivity extends BaseActivity implements View.OnClickList
     boolean isLast = false;
     private RecyclerView recyclerView;
     private SsgGalleryRecyclerAdapter mAdapter;
+    private int pageNumber = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,6 @@ public class SsgGalleryActivity extends BaseActivity implements View.OnClickList
             setTitle("");
         }
 
-
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         recyclerView.setHasFixedSize(true);
@@ -53,7 +53,7 @@ public class SsgGalleryActivity extends BaseActivity implements View.OnClickList
 
         SsgApiService service = ServiceGenerator.getInstance().createService(SsgApiService.class);
 
-        Call<SsgModel> call = service.getSsgGallery(1);
+        Call<SsgModel> call = service.getSsgGallery(pageNumber, 1);
 
         call.enqueue(new Callback<SsgModel>() {
             @Override

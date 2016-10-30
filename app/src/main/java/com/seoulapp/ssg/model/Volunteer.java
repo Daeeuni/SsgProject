@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 /**
  * Created by Boram Moon on 2016-10-05.
  */
@@ -32,6 +34,9 @@ public class Volunteer implements Parcelable {
     private String thumbnail;
 
     private String picture;
+
+    @SerializedName("volunteer_picture")
+    private ArrayList<Photo> pictures;
 
     public Volunteer() {
     }
@@ -70,9 +75,13 @@ public class Volunteer implements Parcelable {
         return time;
     }
 
-    public String getMeeting_location() { return meeting_location; }
+    public String getMeeting_location() {
+        return meeting_location;
+    }
 
-    public String getDetail_info() { return detail_info; }
+    public String getDetail_info() {
+        return detail_info;
+    }
 
     public int getRecruitment() {
         return recruitment;
@@ -82,7 +91,9 @@ public class Volunteer implements Parcelable {
         return total_volunteer;
     }
 
-    public String getThumbnail() { return thumbnail; }
+    public String getThumbnail() {
+        return thumbnail;
+    }
 
     public String getPicture() {
         return picture;
@@ -108,20 +119,36 @@ public class Volunteer implements Parcelable {
         this.time = time;
     }
 
-    public void setMeeting_location(String meeting_location) { this.meeting_location = meeting_location; }
+    public void setMeeting_location(String meeting_location) {
+        this.meeting_location = meeting_location;
+    }
 
-    public void setDetail_info(String detail_info) { this.detail_info = detail_info; }
+    public void setDetail_info(String detail_info) {
+        this.detail_info = detail_info;
+    }
 
     public void setRecruitment(int recruitment) {
         this.recruitment = recruitment;
     }
 
-    public void setTotal_volunteer(int total_volunteer) { this.total_volunteer = total_volunteer; }
+    public void setTotal_volunteer(int total_volunteer) {
+        this.total_volunteer = total_volunteer;
+    }
 
-    public void setThumbnail(String thumbnail) { this.thumbnail = thumbnail;}
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public ArrayList<Photo> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(ArrayList<Photo> pictures) {
+        this.pictures = pictures;
     }
 
     /**

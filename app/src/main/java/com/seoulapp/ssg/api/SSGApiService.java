@@ -21,9 +21,12 @@ public interface SsgApiService {
     Call<Model> getMainViewData();
 
     @GET("gallery")
-    Call<SsgModel> getSsgGallery(@Query("page") int page);
+    Call<SsgModel> getSsgGallery(@Query("page") int page, @Query("uid") int uid);
 
     @FormUrlEncoded
     @POST("like_toggle")
-    Call<Ssg> requestSsgRemove(@Field("gid") int gid, @Field("uid") int uid);
+    Call<Ssg> like(@Field("gid") int gid, @Field("uid") int uid);
+    @FormUrlEncoded
+    @POST("declare_toggle")
+    Call<Ssg> declare(@Field("gid") int gid, @Field("uid") int uid);
 }

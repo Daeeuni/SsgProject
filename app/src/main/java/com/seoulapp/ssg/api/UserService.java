@@ -1,6 +1,7 @@
 package com.seoulapp.ssg.api;
 
 import com.seoulapp.ssg.model.Model;
+import com.seoulapp.ssg.model.User;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -19,4 +20,9 @@ public interface UserService {
     @FormUrlEncoded
     @POST("login")
     Call<Model> login(@Field("email") String email);
+
+    @FormUrlEncoded
+    @POST("myProfile")
+    Call<User> getMyProfile(@Field("uid") int uid);
+
 }

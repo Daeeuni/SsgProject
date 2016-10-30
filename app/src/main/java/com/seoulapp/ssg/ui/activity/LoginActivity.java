@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
@@ -33,6 +32,7 @@ import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.ui.dialog.LoginDialog;
+import com.seoulapp.ssg.widget.CustomLoginButton;
 
 import org.json.JSONObject;
 
@@ -46,7 +46,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private SessionCallback kakaoCallback;
 
     private LoginDialog loginDialog;
-    private Button btnFacebook, btnCustomKakaoLogin;
+    private CustomLoginButton btnFacebook, btnCustomKakaoLogin;
     private LoginButton btnKakaoLogin;
 
 
@@ -55,6 +55,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext()); // SDK 초기화 (setContentView 보다 먼저 실행되어야합니다. 안그럼 에러납니다.)
         mCallbackManager = CallbackManager.Factory.create();  // 페이스북 로그인 응답을 처리할 콜백 관리자
+
 
         LoginManager.getInstance().registerCallback(mCallbackManager, mCallback);
         setContentView(R.layout.activity_login);
@@ -73,10 +74,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         Pattern pattern1 = Pattern.compile("이용약관 및 개인정보 취급방침");
 
         Linkify.addLinks(tvLinkify, pattern1, "http://naver.com", null, mTransform);
-        btnFacebook = (Button) findViewById(R.id.btn_facebook_login);
+        btnFacebook = (CustomLoginButton) findViewById(R.id.btn_facebook_login);
         btnKakaoLogin = (LoginButton) findViewById(R.id.com_kakao_login);
         btnFacebook.setOnClickListener(this);
-        btnCustomKakaoLogin = (Button) findViewById(R.id.btn_kakao_login);
+        btnCustomKakaoLogin = (CustomLoginButton) findViewById(R.id.btn_kakao_login);
         btnCustomKakaoLogin.setOnClickListener(this);
 
         kakaoCallback = new SessionCallback();
