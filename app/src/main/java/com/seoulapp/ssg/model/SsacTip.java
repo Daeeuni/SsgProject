@@ -5,15 +5,24 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 /**
  * Created by Dongyoon on 2016. 10. 1..
  */
 public class SsacTip implements Parcelable {
+    public int code;
+    public String msg;
+
+    public int tid;
     public String title;
     @SerializedName("subtitle")
     public String subTitle;
     public String category;
     public String thumbnail;
+
+    @SerializedName("tip_detail")
+    public ArrayList<SsacTipContents> tipDetail;
 
     public SsacTip() {
     }
@@ -57,7 +66,7 @@ public class SsacTip implements Parcelable {
 
     }
 
-    public static Creator <SsacTip> CREATOR = new Creator<SsacTip>() {
+    public static Creator<SsacTip> CREATOR = new Creator<SsacTip>() {
         @Override
         public SsacTip createFromParcel(Parcel source) {
             return new SsacTip(source);

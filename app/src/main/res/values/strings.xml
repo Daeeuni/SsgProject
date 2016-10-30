@@ -14,6 +14,7 @@
 
 
     <string name="btn_volunteer">봉사활동 참여할래요</string>
+    <string name="alert_ssac_join_msg">"- 해당 봉사활동에 참가신청 시, 7일 전까지 취소가 가능합니다.\n" + "- 무단으로 3회 이상 불참하게 되면 봉사활동 참여가 제한 될 수 있습니다.\n" +"\n" + "참가 신청하시겠습니까?"</string>
     <string name="txt_info_name">이름</string>
     <string name="edit_name">실명을 입력해주세요</string>
     <string name="txt_info_phone">연락처</string>

@@ -10,7 +10,8 @@
     android:paddingLeft="20dp"
     android:paddingRight="14dp"
     android:paddingTop="12dp"
-    tools:ignore="MissingPrefix">
+    tools:ignore="MissingPrefix"
+    android:layout_marginBottom="1dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -47,12 +48,15 @@
         android:layout_height="wrap_content"
         android:layout_weight="1" />
 
-    <Button
+    <TextView
+        android:id="@+id/tv_dday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@drawable/bg_button_skyblue"
+        android:gravity="center"
         android:textSize="18dp"
+        android:textColor="@android:color/white"
         app:font="custom5"
         tools:text="참여 D-3" />
 </LinearLayout>

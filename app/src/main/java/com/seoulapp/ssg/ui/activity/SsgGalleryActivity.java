@@ -1,6 +1,5 @@
 package com.seoulapp.ssg.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,14 +11,11 @@ import android.view.View;
 
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.SsgApiService;
-import com.seoulapp.ssg.model.Ssg;
+import com.seoulapp.ssg.managers.PropertyManager;
 import com.seoulapp.ssg.model.SsgModel;
 import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.adapter.SsgGalleryRecyclerAdapter;
 import com.seoulapp.ssg.util.DividerItemDecoration;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,7 +24,6 @@ import retrofit2.Response;
 public class SsgGalleryActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = SsgGalleryActivity.class.getSimpleName();
     boolean isLast = false;
-    private RecyclerView recyclerView;
     private SsgGalleryRecyclerAdapter mAdapter;
     private int pageNumber = 1;
 
@@ -36,7 +31,6 @@ public class SsgGalleryActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ssg_gallery);
-        Intent intent = getIntent();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -47,7 +41,7 @@ public class SsgGalleryActivity extends BaseActivity implements View.OnClickList
             setTitle("");
         }
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         recyclerView.setHasFixedSize(true);
 
@@ -57,36 +51,29 @@ public class SsgGalleryActivity extends BaseActivity implements View.OnClickList
         mAdapter = new SsgGalleryRecyclerAdapter(this);
         recyclerView.setAdapter(mAdapter);
 
-        if (intent.hasExtra("ssg")) {
-            Ssg ssg = intent.getParcelableExtra("ssg");
-            List<Ssg> list = new ArrayList<>();
-            list.add(ssg);
-            mAdapter.addItems(list);
 
-        } else {
-            SsgApiService service = ServiceGenerator.getInstance().createService(SsgApiService.class);
+        SsgApiService service = ServiceGenerator.getInstance().createService(SsgApiService.class);
 
-            Call<SsgModel> call = service.getSsgGallery(pageNumber, 1);
+        Call<SsgModel> call = service.getSsgGallery(pageNumber, PropertyManager.getInstance().getUserId());
 
-            call.enqueue(new Callback<SsgModel>() {
-                @Override
-                public void onResponse(Call<SsgModel> call, Response<SsgModel> response) {
-                    if (response.isSuccessful()) {
-                        if (response.body().code == 200) {
-                            mAdapter.addItems(response.body().ssgs);
-                            if (response.body().last) {
-                                isLast = response.body().last;
-                            }
+        call.enqueue(new Callback<SsgModel>() {
+            @Override
+            public void onResponse(Call<SsgModel> call, Response<SsgModel> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().code == 200) {
+                        mAdapter.addItems(response.body().ssgs);
+                        if (response.body().last) {
+                            isLast = response.body().last;
                         }
                     }
                 }
+            }
 
-                @Override
-                public void onFailure(Call<SsgModel> call, Throwable t) {
-                    Log.d(TAG, "onFailure: " + t.getMessage());
-                }
-            });
-        }
+            @Override
+            public void onFailure(Call<SsgModel> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
 
 
     }
@@ -109,18 +96,4 @@ public class SsgGalleryActivity extends BaseActivity implements View.OnClickList
         return super.onOptionsItemSelected(item);
     }
 
-//    @Override
-//    public void onEraseClick(int position) {
-//
-//    }
-
-//    @Override
-//    public void onReportClick(int position) {
-//        showReportDialog(position);
-//    }
-//
-//    @Override
-//    public void onOkClick(int position) {
-//        mAdapter.updateReportButton(position);
-//    }
 }

@@ -15,7 +15,8 @@ public class Model {
     @SerializedName("tip_list")
     public ArrayList<SsacTip> ssacTips;
 
-    @SerializedName("volunteer_list")
+
+    @SerializedName(value = "ssacs", alternate = {"volunteer_list", "my_sak"})
     public ArrayList<Ssac> ssacs;
     public User user;
 /*

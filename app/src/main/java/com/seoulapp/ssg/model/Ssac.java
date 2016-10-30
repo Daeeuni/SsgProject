@@ -35,6 +35,9 @@ public class Ssac implements Parcelable {
 
     public byte volunteer_apply;
 
+    public int Dday;
+    public int apply; // 참가여부
+
     @SerializedName("volunteer_picture")
     private ArrayList<Photo> pictures;
 

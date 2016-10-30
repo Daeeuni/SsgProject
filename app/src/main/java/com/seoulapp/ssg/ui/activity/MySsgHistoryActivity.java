@@ -14,6 +14,7 @@ import android.view.View;
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.SsgApiService;
 import com.seoulapp.ssg.listener.RecyclerItemClickListener;
+import com.seoulapp.ssg.managers.PropertyManager;
 import com.seoulapp.ssg.model.Ssg;
 import com.seoulapp.ssg.model.SsgModel;
 import com.seoulapp.ssg.network.ServiceGenerator;
@@ -51,7 +52,7 @@ public class MySsgHistoryActivity extends AppCompatActivity {
         mAdapter = new SsgHistoryRecyclerAdapter(this);
         recyclerView.setAdapter(mAdapter);
         SsgApiService service = ServiceGenerator.getInstance().createService(SsgApiService.class);
-        Call<SsgModel> call = service.getMySsgHistory(1);
+        Call<SsgModel> call = service.getMySsgHistory(PropertyManager.getInstance().getUserId());
         call.enqueue(new Callback<SsgModel>() {
             @Override
             public void onResponse(Call<SsgModel> call, Response<SsgModel> response) {

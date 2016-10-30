@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +21,7 @@ import android.widget.Toast;
 
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.VolunteerApiService;
+import com.seoulapp.ssg.managers.PropertyManager;
 import com.seoulapp.ssg.model.Model;
 import com.seoulapp.ssg.model.Ssac;
 import com.seoulapp.ssg.model.User;
@@ -34,20 +38,7 @@ import retrofit2.Response;
 public class VolunteerActivity extends BaseActivity {
 
     private static final String TAG = VolunteerActivity.class.getSimpleName();
-    private TextView tv_volunteer_title;
-    private TextView tv_volunteer_title_content;
-    private TextView tv_volunteer_date;
-    private TextView tv_volunteer_date_content;
-    private TextView tv_volunteer_schedule;
-    private TextView tv_volunteer_schedule_content;
-    private TextView tv_volunteer_place;
-    private TextView tv_volunteer_place_content;
-    private TextView tv_volunteer_meetingpoint;
-    private TextView tv_volunteer_meetingpoint_content;
-    private TextView tv_volunteer_total;
-    private TextView tv_volunteer_total_content;
-    private TextView tv_volunteer_detail;
-    private TextView tv_volunteer_detail_content;
+
     private Button btn_volunteer_join;
     private ArrayAdapter<String> adapter;
     private ViewPager mPager;
@@ -58,6 +49,8 @@ public class VolunteerActivity extends BaseActivity {
     private String[] v_title = {"제목", "날짜", "봉사시간", "활동장소", "집합장소", "모집인원", "상세설명"};
     Ssac volParcel;
     User user;
+
+    TextView tv_volunteer_total_content;
 
     @Override
 
@@ -82,20 +75,20 @@ public class VolunteerActivity extends BaseActivity {
 
         v_pageAdapter = new VolunteerPagerAdapter(VolunteerActivity.this);
 
-        tv_volunteer_title = (TextView) findViewById(R.id.tv_volunteer_title);
-        tv_volunteer_title_content = (TextView) findViewById(R.id.tv_volunteer_title_content);
-        tv_volunteer_date = (TextView) findViewById(R.id.tv_volunteer_date);
-        tv_volunteer_date_content = (TextView) findViewById(R.id.tv_volunteer_date_content);
-        tv_volunteer_schedule = (TextView) findViewById(R.id.tv_volunteer_schedule);
-        tv_volunteer_schedule_content = (TextView) findViewById(R.id.tv_volunteer_schedule_content);
-        tv_volunteer_place = (TextView) findViewById(R.id.tv_volunteer_place);
-        tv_volunteer_place_content = (TextView) findViewById(R.id.tv_volunteer_place_content);
-        tv_volunteer_meetingpoint = (TextView) findViewById(R.id.tv_volunteer_meetingpoint);
-        tv_volunteer_meetingpoint_content = (TextView) findViewById(R.id.tv_volunteer_meetingpoint_content);
-        tv_volunteer_total = (TextView) findViewById(R.id.tv_volunteer_total);
+        TextView tv_volunteer_title = (TextView) findViewById(R.id.tv_volunteer_title);
+        TextView tv_volunteer_title_content = (TextView) findViewById(R.id.tv_volunteer_title_content);
+        TextView tv_volunteer_date = (TextView) findViewById(R.id.tv_volunteer_date);
+        TextView tv_volunteer_date_content = (TextView) findViewById(R.id.tv_volunteer_date_content);
+        TextView tv_volunteer_schedule = (TextView) findViewById(R.id.tv_volunteer_schedule);
+        TextView tv_volunteer_schedule_content = (TextView) findViewById(R.id.tv_volunteer_schedule_content);
+        TextView tv_volunteer_place = (TextView) findViewById(R.id.tv_volunteer_place);
+        TextView tv_volunteer_place_content = (TextView) findViewById(R.id.tv_volunteer_place_content);
+        TextView tv_volunteer_meetingpoint = (TextView) findViewById(R.id.tv_volunteer_meetingpoint);
+        TextView tv_volunteer_meetingpoint_content = (TextView) findViewById(R.id.tv_volunteer_meetingpoint_content);
+        TextView tv_volunteer_total = (TextView) findViewById(R.id.tv_volunteer_total);
         tv_volunteer_total_content = (TextView) findViewById(R.id.tv_volunteer_total_content);
-        tv_volunteer_detail = (TextView) findViewById(R.id.tv_volunteer_detail);
-        tv_volunteer_detail_content = (TextView) findViewById(R.id.tv_volunteer_detail_content);
+        TextView tv_volunteer_detail = (TextView) findViewById(R.id.tv_volunteer_detail);
+        TextView tv_volunteer_detail_content = (TextView) findViewById(R.id.tv_volunteer_detail_content);
 
         btn_volunteer_join = (Button) findViewById(R.id.btn_volunteer_join);
         mPager = (ViewPager) findViewById(R.id.pager_volunteer);
@@ -114,6 +107,7 @@ public class VolunteerActivity extends BaseActivity {
         tv_volunteer_schedule_content.append(volParcel.getTime());
         tv_volunteer_place_content.append(volParcel.getSpot());
         tv_volunteer_meetingpoint_content.append(volParcel.getMeeting_location());
+        Log.d(TAG, "onCreate: " + volParcel.getTotal_volunteer() + " / " + volParcel.getRecruitment());
         tv_volunteer_total_content.append(volParcel.getTotal_volunteer() + " / " + volParcel.getRecruitment());
         tv_volunteer_detail_content.append(volParcel.getDetail_info());
 
@@ -130,10 +124,7 @@ public class VolunteerActivity extends BaseActivity {
                                                           dialog_check.setTitle("주의사항");
                                                           // set the custom dialog components - text, image and button
                                                           TextView text = (TextView) dialog_check.findViewById(R.id.txt_dialog);
-                                                          text.setText("- 해당 봉사활동에 참가신청 시, 7일 전까지 취소가 가능합니다.\n" +
-                                                                  "- 무단으로 3회 이상 불참하게 되면 봉사활동 참여가 제한 될 수 있습니다.\n" +
-                                                                  "\n" +
-                                                                  "참가 신청하시겠습니까?");
+                                                          text.setText(getResources().getString(R.string.alert_ssac_join_msg));
                                                           Button dialogButton = (Button) dialog_check.findViewById(R.id.btn_dialog_OK);
                                                           // if button is clicked, close the custom dialog
                                                           dialogButton.setOnClickListener(new View.OnClickListener() {
@@ -155,16 +146,61 @@ public class VolunteerActivity extends BaseActivity {
 
                                                                                                   // set the custom dialog components - text, image and button
 
-                                                                                                  name = edit_name.getText().toString();
-                                                                                                  phone = edit_phone.getText().toString();
+                                                                                                  edit_name.addTextChangedListener(new TextWatcher() {
+                                                                                                      @Override
+                                                                                                      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                                                                                                      }
+
+                                                                                                      @Override
+                                                                                                      public void onTextChanged(CharSequence s, int i, int i1, int count) {
+                                                                                                          if (s.length() > 0) {
+                                                                                                              name = s.toString();
+                                                                                                          } else {
+                                                                                                              name = "";
+                                                                                                          }
+                                                                                                      }
+
+                                                                                                      @Override
+                                                                                                      public void afterTextChanged(Editable editable) {
+
+                                                                                                      }
+                                                                                                  });
+
+                                                                                                  edit_phone.addTextChangedListener(new TextWatcher() {
+                                                                                                      @Override
+                                                                                                      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                                                                                                      }
+
+                                                                                                      @Override
+                                                                                                      public void onTextChanged(CharSequence s, int i, int i1, int count) {
+                                                                                                          if (s.length() > 0) {
+                                                                                                              phone = s.toString();
+                                                                                                          } else {
+                                                                                                              phone = "";
+                                                                                                          }
+                                                                                                      }
+
+                                                                                                      @Override
+                                                                                                      public void afterTextChanged(Editable editable) {
+
+                                                                                                      }
+                                                                                                  });
 
                                                                                                   btn_info_ok.setOnClickListener(new View.OnClickListener() {
 
 
                                                                                                                                      @Override
                                                                                                                                      public void onClick(View v) {
-                                                                                                                                         requestJoinSsac(name, phone);
-                                                                                                                                         dialog_info.dismiss();
+                                                                                                                                         if (name == null || TextUtils.isEmpty(name) ||
+                                                                                                                                                 phone == null || TextUtils.isEmpty(phone)) {
+                                                                                                                                             Toast.makeText(VolunteerActivity.this, "이름과 연락처는 필수 입력사항압니다.", Toast.LENGTH_SHORT).show();
+                                                                                                                                             return;
+                                                                                                                                         } else {
+                                                                                                                                             requestJoinSsac(name, phone);
+                                                                                                                                             dialog_info.dismiss();
+                                                                                                                                         }
                                                                                                                                      }
                                                                                                                                  }
 
@@ -196,7 +232,7 @@ public class VolunteerActivity extends BaseActivity {
         );
 
         VolunteerApiService service = ServiceGenerator.getInstance().createService(VolunteerApiService.class);
-        Call<Ssac> call = service.getSsacPictures(volParcel.getVolunteerId(), 1);
+        Call<Ssac> call = service.getSsacPictures(volParcel.getVolunteerId(), PropertyManager.getInstance().getUserId());
 
         call.enqueue(new Callback<Ssac>() {
             @Override
@@ -223,26 +259,18 @@ public class VolunteerActivity extends BaseActivity {
 
     private void requestJoinSsac(String name, String phone) {
         VolunteerApiService service = ServiceGenerator.getInstance().createService(VolunteerApiService.class);
-        Call<Model> call = service.joinVolunteer(volParcel.getVolunteerId(), 1, name, phone);
+        Call<Model> call = service.joinVolunteer(volParcel.getVolunteerId(), PropertyManager.getInstance().getUserId(), name, phone);
         call.enqueue(new Callback<Model>() {
                          @Override
                          public void onResponse(Call<Model> call, Response<Model> response) {
                              if (response.isSuccessful()) {
                                  if (response.body().getCode() == 200) {
-//                        if (response.body().user.getJoinCheck() == 1) {
-//                            Log.d(TAG, "onResponse: true " + user.getJoinCheck());
-//
-//                        } else {
-//                            Log.d(TAG, "onResponse: false " + user.getJoinCheck());
-//                            user.setJoinCheck(0);
-//                            setJoinButton(false);
-
-//                        }
+                                     volParcel.setTotal_volunteer(volParcel.getTotal_volunteer() + 1);
                                      user.setJoinCheck(1);
                                      setJoinButton(true);
 
                                  } else if (response.body().getCode() == 600) {
-                                     Log.d(TAG, "onResponse: " + response.body().getCode());
+                                     volParcel.setTotal_volunteer(volParcel.getTotal_volunteer() - 1);
                                      user.setJoinCheck(0);
                                      setJoinButton(false);
                                  } else {
@@ -294,6 +322,12 @@ public class VolunteerActivity extends BaseActivity {
             btn_volunteer_join.setText("봉사활동 참여할래요");
             btn_volunteer_join.setBackgroundColor(getResources().getColor(R.color.bntNormal));
         }
+
+        setRequirementTextView();
+    }
+
+    private void setRequirementTextView() {
+        tv_volunteer_total_content.setText(volParcel.getTotal_volunteer() + " / " + volParcel.getRecruitment());
     }
 
     @Override

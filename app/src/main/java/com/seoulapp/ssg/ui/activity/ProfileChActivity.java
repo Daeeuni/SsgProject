@@ -1,7 +1,6 @@
 package com.seoulapp.ssg.ui.activity;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.UserService;
+import com.seoulapp.ssg.managers.PropertyManager;
 import com.seoulapp.ssg.model.User;
 import com.seoulapp.ssg.network.ServiceGenerator;
 
@@ -64,7 +64,7 @@ public class ProfileChActivity extends BaseActivity implements View.OnClickListe
         btn_profile_cancel.setOnClickListener(this);
 
         service = ServiceGenerator.getInstance().createService(UserService.class);
-        Call<User> call = service.getMyProfile(1);
+        Call<User> call = service.getMyProfile(PropertyManager.getInstance().getUserId());
 
         call.enqueue(new Callback<User>() {
             @Override
@@ -93,7 +93,6 @@ public class ProfileChActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        Intent intent;
         switch (id) {
             case R.id.btn_email_send:
                 onSendEmail();
@@ -102,24 +101,19 @@ public class ProfileChActivity extends BaseActivity implements View.OnClickListe
                 onCheckingEmail();
                 break;
             case R.id.btn_profile_ok:
-                this.finish();
-                intent = new Intent(ProfileChActivity.this, ProfileChActivity.class);
-                startActivity(intent);
-                //onChangedEmail();
+                finish();
                 break;
             case R.id.btn_profile_cancel:
-                intent = new Intent(ProfileChActivity.this, SsgSettingActivity.class);
-                startActivity(intent);
+                finish();
                 break;
         }
     }
 
     private void onCheckingEmail() {
-        int user_id = user.getUser_num();
         String changed_email = et_user_email.getText().toString();
         String auth_key = et_key.getText().toString();
 
-        Call<User> call = service.changeEmail(user_id, changed_email, auth_key);
+        Call<User> call = service.changeEmail(PropertyManager.getInstance().getUserId(), changed_email, auth_key);
 
         call.enqueue(new Callback<User>() {
             @Override
@@ -205,7 +199,7 @@ public class ProfileChActivity extends BaseActivity implements View.OnClickListe
         String changed_email = et_user_email.getText().toString();
         Log.d(TAG, "email 전송, 네트워크전:" + user_id + " " + changed_email);
 
-        Call<User> call = service.sendEmail(user_id, changed_email);
+        Call<User> call = service.sendEmail(PropertyManager.getInstance().getUserId(), changed_email);
 
         call.enqueue(new Callback<User>() {
             @Override

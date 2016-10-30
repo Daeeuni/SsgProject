@@ -6,6 +6,7 @@ package com.seoulapp.ssg;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 
 import com.kakao.auth.KakaoSDK;
 import com.seoulapp.ssg.ui.adapter.KakaoSDKAdapter;
@@ -20,12 +21,13 @@ import com.tsengvn.typekit.Typekit;
 public class SsgApplication extends Application {
     private static volatile SsgApplication instance = null;
     private static volatile Activity currentActivity = null;
+    private static Context mContext;
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
-
+        mContext = this;
         Typekit.getInstance()
                 .addNormal(Typekit.createFromAsset(this,"SeoulNamsanL.otf"))
                 .addCustom1(Typekit.createFromAsset(this, "SeoulHangangM.otf"))
@@ -48,6 +50,11 @@ public class SsgApplication extends Application {
     public static void setCurrentActivity(Activity currentActivity) {
         SsgApplication.currentActivity = currentActivity;
     }
+
+    public static Context getContext() {
+        return mContext;
+    }
+
 
     /**
      * singleton 애플리케이션 객체를 얻는다.

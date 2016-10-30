@@ -26,13 +26,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.SsgApiService;
+import com.seoulapp.ssg.managers.PropertyManager;
 import com.seoulapp.ssg.model.Model;
+import com.seoulapp.ssg.model.Ssg;
 import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.dialog.UploadPictureDialog;
 
@@ -52,8 +53,6 @@ import retrofit2.Response;
 
 public class ReportActivity extends BaseActivity implements UploadPictureDialog.OnChoiceClickListener,
         View.OnClickListener, MapView.MapViewEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
-    public static final String API_BASE_URL = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
-
     private static final String TAG = ReportActivity.class.getSimpleName();
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 100;
     private UploadPictureDialog mDialog;
@@ -68,13 +67,14 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
     private ImageView ivUploadPicture;
     private MapView mMapView;
     private MapPOIItem mMapPOIItem;
-    private TextView tvMapDescription;
     private ScrollView mRootScrollView;
     private EditText editLocationDetail, editComment;
     private MapReverseGeoCoder mReverseGeoCoder = null;
 
     private String imagePath, locationDetail, comment;
     private double lat, lng;
+
+    private Ssg ssg;
 
 
     @Override
@@ -94,10 +94,19 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
         ivUploadPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDialog = new UploadPictureDialog();
-                mDialog.setOnChoiceClickListener(ReportActivity.this);
-                mDialog.show(getSupportFragmentManager(), null);
 
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                intent.putExtra("crop", "true");
+                intent.putExtra("scale", true);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, getTempUri());
+//        intent.putExtra("outputFormat",
+//                Bitmap.CompressFormat.JPEG.toString());
+                intent.putExtra("return-data", true);
+
+                startActivityForResult(intent, REQUEST_CODE_GALLERY);
             }
         });
 
@@ -105,7 +114,6 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
         mMapView.setDaumMapApiKey(getResources().getString(R.string.daum_map_api_key));
         lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mRootScrollView = (ScrollView) findViewById(R.id.scroll_view);
-        tvMapDescription = (TextView) findViewById(R.id.tv_map_description);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mMapView);
         mMapView.setMapViewEventListener(this);
@@ -130,6 +138,8 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() > 0) {
                     comment = charSequence.toString();
+                } else {
+                    comment = "";
                 }
             }
 
@@ -149,6 +159,8 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() > 0) {
                     locationDetail = charSequence.toString();
+                } else {
+                    locationDetail = "";
                 }
 
             }
@@ -256,6 +268,8 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
                     Toast.makeText(ReportActivity.this, "이미지를 추가해주세요", Toast.LENGTH_SHORT).show();
                 } else if (locationDetail == null) {
                     Toast.makeText(ReportActivity.this, "장소정보를 추가해주세요", Toast.LENGTH_SHORT).show();
+                } else if (comment == null) {
+                    Toast.makeText(ReportActivity.this, "코멘트를 추가해주세요", Toast.LENGTH_SHORT).show();
                 } else {
                     mReverseGeoCoder = new MapReverseGeoCoder(getString(R.string.daum_map_api_key), mMapView.getMapCenterPoint(), ReportActivity.this, ReportActivity.this);
                     mReverseGeoCoder.startFindingAddress();
@@ -292,8 +306,8 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
             //Gps 위치제공자에 의한 위치변화. 오차범위가 좁다.
             //Network 위치제공자에 의한 위치변화
             //Network 위치는 Gps에 비해 정확도가 많이 떨어진다.
-            tvMapDescription.setText("위치정보 : " + provider + "\n위도 : " + longitude + "\n경도 : " + latitude
-                    + "\n고도 : " + altitude + "\n정확도 : " + accuracy);
+//            tvMapDescription.setText("위치정보 : " + provider + "\n위도 : " + longitude + "\n경도 : " + latitude
+//                    + "\n고도 : " + altitude + "\n정확도 : " + accuracy);
             MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(latitude, longitude);
             mMapView.setMapCenterPoint(mapPoint, true);
             mMapPOIItem = new MapPOIItem();
@@ -425,15 +439,14 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
     }
 
     private void onFinishReverseGeoCoding(String result) {
-        Toast.makeText(ReportActivity.this, "Reverse Geo-coding : " + result, Toast.LENGTH_SHORT).show();
 
-        postImageAndData(imagePath, "1", comment, locationDetail, result, String.valueOf(lat), String.valueOf(lng));
+        postImageAndData(imagePath, PropertyManager.getInstance().getUserId(), comment, locationDetail, result, String.valueOf(lat), String.valueOf(lng));
 
     }
 
     private void postImageAndData(String filePath, String uid, String comment, String detailLocation, String pname, String lat, String lng) {
         String path = filePath;
-        File file = new File(path);
+        final File file = new File(path);
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("picture", file.getName(), requestFile);
 
@@ -458,9 +471,10 @@ public class ReportActivity extends BaseActivity implements UploadPictureDialog.
         service.upload_ssg(body, requestUserId, requestComment, requestDetailLoca, requestPname, requestLat, requestLng).enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {
-                if(response.isSuccessful()) {
-                    Log.d(TAG, "onResponse: fffffff");
-                } else{
+                if (response.isSuccessful()) {
+                    Toast.makeText(ReportActivity.this, "쓱이 등록 되었습니다", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
                     Log.d(TAG, "onResponse: " + response.message());
                 }
 

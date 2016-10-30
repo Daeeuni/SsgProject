@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.SsgApiService;
+import com.seoulapp.ssg.managers.PropertyManager;
 import com.seoulapp.ssg.model.Model;
 import com.seoulapp.ssg.model.Ssg;
 import com.seoulapp.ssg.network.ServiceGenerator;
@@ -25,7 +26,7 @@ public class MySsgDetailActivity extends BaseActivity implements View.OnClickLis
 
     ImageView ivSsgPicture;
     TextView tvSpotDetail, tvSsgDate, tvSsgComment;
-    Button btnAdjust, btnRemove;
+    Button btnRemove;
 
     Ssg ssg;
 
@@ -45,9 +46,9 @@ public class MySsgDetailActivity extends BaseActivity implements View.OnClickLis
         tvSsgDate = (TextView) findViewById(R.id.tv_ssg_date);
         tvSsgComment = (TextView) findViewById(R.id.tv_ssg_comment);
         btnRemove = (Button) findViewById(R.id.btn_remove);
-        btnAdjust = (Button) findViewById(R.id.btn_adjust);
+//        btnAdjust = (Button) findViewById(R.id.btn_adjust);
         btnRemove.setOnClickListener(this);
-        btnAdjust.setOnClickListener(this);
+//        btnAdjust.setOnClickListener(this);
 
         tvSpotDetail.setText(ssg.spotDetail);
         tvSsgDate.setText(ssg.date);
@@ -66,8 +67,12 @@ public class MySsgDetailActivity extends BaseActivity implements View.OnClickLis
         int id = view.getId();
 
         switch (id) {
-            case R.id.btn_adjust:
-                break;
+//            case R.id.btn_adjust:
+//                Intent i = new Intent(MySsgDetailActivity.this, ReportActivity.class);
+//                i.putExtra("ssg", ssg);
+//                startActivity(i);
+//                finish();
+//                break;
             case R.id.btn_remove:
                 AlertDialog dialog = createDeleteDialog();
                 dialog.show();
@@ -85,7 +90,7 @@ public class MySsgDetailActivity extends BaseActivity implements View.OnClickLis
             public void onClick(final DialogInterface dialog, int arg1) {
 
                 SsgApiService service = ServiceGenerator.getInstance().createService(SsgApiService.class);
-                Call<Model> call = service.deleteSsg(ssg.ssgId, 1);
+                Call<Model> call = service.deleteSsg(ssg.ssgId, PropertyManager.getInstance().getUserId());
                 call.enqueue(new Callback<Model>() {
                     @Override
                     public void onResponse(Call<Model> call, Response<Model> response) {

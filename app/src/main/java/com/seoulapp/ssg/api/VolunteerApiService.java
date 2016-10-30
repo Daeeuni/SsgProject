@@ -18,9 +18,9 @@ public interface VolunteerApiService {
 
     @FormUrlEncoded
     @POST("volunteer_join")
-    Call<Model> joinVolunteer(@Field("vid") int vid, @Field("uid") int uid, @Field("uname") String uname, @Field("uphone") String phoneNumber);
+    Call<Model> joinVolunteer(@Field("vid") int vid, @Field("uid") String uid, @Field("uname") String uname, @Field("uphone") String phoneNumber);
 
     @FormUrlEncoded
     @POST("volunteer_detail")
-    Call<Ssac> getSsacPictures(@Field("vid") int vid, @Field("uid") int uid);
+    Call<Ssac> getSsacPictures(@Field("vid") int vid, @Field("uid") String uid);
 }

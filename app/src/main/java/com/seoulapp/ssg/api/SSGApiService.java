@@ -1,6 +1,7 @@
 package com.seoulapp.ssg.api;
 
 import com.seoulapp.ssg.model.Model;
+import com.seoulapp.ssg.model.SsacTip;
 import com.seoulapp.ssg.model.Ssg;
 import com.seoulapp.ssg.model.SsgModel;
 
@@ -25,23 +26,27 @@ public interface SsgApiService {
     Call<Model> getMainViewData();
 
     @GET("gallery")
-    Call<SsgModel> getSsgGallery(@Query("page") int page, @Query("uid") int uid);
+    Call<SsgModel> getSsgGallery(@Query("page") int page, @Query("uid") String uid);
 
     @FormUrlEncoded
     @POST("my_ssg")
-    Call<SsgModel> getMySsgHistory(@Field("uid") int uid);
+    Call<SsgModel> getMySsgHistory(@Field("uid") String uid);
+
+    @FormUrlEncoded
+    @POST("my_sak")
+    Call<Model> getMySsacHistory(@Field("uid") String uid);
 
     @FormUrlEncoded
     @POST("like_toggle")
-    Call<Ssg> like(@Field("gid") int gid, @Field("uid") int uid);
+    Call<Ssg> like(@Field("gid") int gid, @Field("uid") String uid);
 
     @FormUrlEncoded
     @POST("declare_toggle")
-    Call<Ssg> declare(@Field("gid") int gid, @Field("uid") int uid);
+    Call<Ssg> declare(@Field("gid") int gid, @Field("uid") String uid);
 
     @FormUrlEncoded
     @POST("myssg_delete")
-    Call<Model> deleteSsg(@Field("gid") int gid, @Field("uid") int uid);
+    Call<Model> deleteSsg(@Field("gid") int gid, @Field("uid") String uid);
 
     @Multipart
     @POST("report")
@@ -52,5 +57,20 @@ public interface SsgApiService {
                            @Part("pname") RequestBody pname,
                            @Part("lat") RequestBody lat,
                            @Part("lng") RequestBody lng);
+
+    @Multipart
+    @POST("myssg_modify")
+    Call<Model> modify_ssg(@Part MultipartBody.Part body,
+                           @Part("uid") RequestBody uid,
+                           @Part("gid") RequestBody gid,
+                           @Part("comment") RequestBody comment,
+                           @Part("detail_location") RequestBody detailLocation,
+                           @Part("pname") RequestBody pname,
+                           @Part("lat") RequestBody lat,
+                           @Part("lng") RequestBody lng);
+
+    @FormUrlEncoded
+    @POST("tip_detail")
+    Call<SsacTip> getSsacTipDetail(@Field("tid") int tid);
 
 }

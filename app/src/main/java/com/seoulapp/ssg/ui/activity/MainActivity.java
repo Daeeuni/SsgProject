@@ -22,8 +22,10 @@ import com.bumptech.glide.Glide;
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.SsgApiService;
 import com.seoulapp.ssg.listener.RecyclerItemClickListener;
+import com.seoulapp.ssg.managers.PropertyManager;
 import com.seoulapp.ssg.model.Model;
 import com.seoulapp.ssg.model.Ssac;
+import com.seoulapp.ssg.model.SsacTip;
 import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.adapter.SsacTipPagerAdapter;
 import com.seoulapp.ssg.ui.adapter.VolunteerRecyclerAdapter;
@@ -35,7 +37,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, SsacTipPagerAdapter.OnItemClickListener {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private Toolbar toolbar;
@@ -53,10 +55,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent i = getIntent();
-        String profilePath = i.getStringExtra("profile_picture");
-        String profileName = i.getStringExtra("profile_name");
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ssacPager = (ViewPager) findViewById(R.id.vp_ssac_tip);
@@ -70,15 +68,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         tipPagerAdapter = new SsacTipPagerAdapter(this);
         ssacPager.setAdapter(tipPagerAdapter);
 
-        ssacPager.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SsgTipActivity.class);
-                startActivity(intent);
-            }
-
-        } );
-
+        tipPagerAdapter.setOnItemClickListener(this);
 
 
         Button btnSsgReport = (Button) findViewById(R.id.btn_ssg_report);
@@ -131,12 +121,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         ImageView ivProfile = (ImageView) nav_header_view.findViewById(R.id.iv_profile_picture);
         Glide
                 .with(this)
-                .load(profilePath)
+                .load(PropertyManager.getInstance().getUserPhoto())
                 .placeholder(R.drawable.ic_profile_none)
                 .bitmapTransform(new CropCircleTransformation(this))
                 .into(ivProfile);
         TextView tvProfile = (TextView) nav_header_view.findViewById(R.id.tv_user_name);
-        tvProfile.setText(profileName);
+        tvProfile.setText(PropertyManager.getInstance().getUserNickname());
 
         getMainViewData();
 
@@ -196,5 +186,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return false;
+    }
+
+    @Override
+    public void onItemClick(SsacTip item) {
+        Intent i = new Intent(this, SsacTipActivity.class);
+        i.putExtra("tid", item.tid);
+        startActivity(i);
     }
 }

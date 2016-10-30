@@ -13,6 +13,7 @@ import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -33,6 +34,7 @@ import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
 import com.seoulapp.ssg.R;
+import com.seoulapp.ssg.managers.PropertyManager;
 import com.seoulapp.ssg.ui.dialog.LoginDialog;
 import com.seoulapp.ssg.widget.CustomLoginButton;
 
@@ -40,7 +42,7 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, LoginDialog.OnDismissListener {
     private static final String TAG = LoginActivity.class.getSimpleName();
     private CallbackManager mCallbackManager;
     private SessionCallback kakaoCallback;
@@ -55,9 +57,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         FacebookSdk.sdkInitialize(getApplicationContext()); // SDK 초기화 (setContentView 보다 먼저 실행되어야합니다. 안그럼 에러납니다.)
         mCallbackManager = CallbackManager.Factory.create();  // 페이스북 로그인 응답을 처리할 콜백 관리자
 
-
         LoginManager.getInstance().registerCallback(mCallbackManager, mCallback);
         setContentView(R.layout.activity_login);
+
+        if (PropertyManager.getInstance().getLoginFlag()) {
+            redirectMainActivity();
+        }
 
         btnFacebook = (CustomLoginButton) findViewById(R.id.btn_facebook_login);
         btnFacebook.setOnClickListener(this);
@@ -97,10 +102,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     }
 
-    private void redirectLoginDialog() {
-        startActivity(new Intent(this, LoginDialog.class));
+    private void redirectMainActivity() {
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
         finish();
     }
+
 
     private class SessionCallback implements ISessionCallback {
 
@@ -112,13 +119,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 @Override
                 public void onFailure(ErrorResult errorResult) {
                     String message = "failed to get user info. msg=" + errorResult;
-                    Log.e(TAG, "onFailure: " + message);
 
                     ErrorCode result = ErrorCode.valueOf(errorResult.getErrorCode());
                     if (result == ErrorCode.CLIENT_ERROR_CODE) {
-                        finish();
-                    } else {
-                        redirectLoginDialog();
+                        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -129,7 +133,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 @Override
                 public void onNotSignedUp() {
-                    Log.e(TAG, "onNotSignedUp: ");
                 }
 
                 @Override
@@ -144,6 +147,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     bundle.putString("join_type", "K");
 
                     LoginDialog loginDialog = new LoginDialog();
+                    loginDialog.setOnDismissListener(LoginActivity.this);
                     loginDialog.setArguments(bundle);
                     loginDialog.show(getSupportFragmentManager(), null);
                 }
@@ -203,11 +207,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         bundle.putString("join_type", "F");
                         bundle.putString("token", mToken);
 
-                        /*if (TextUtils.isEmpty(email)) {
-                            email = "";
-                        }
-*/
+
                         loginDialog = new LoginDialog();
+                        loginDialog.setOnDismissListener(LoginActivity.this);
                         loginDialog.setArguments(bundle);
                         loginDialog.show(getSupportFragmentManager(), null);
                     }
@@ -230,6 +232,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         }
     };
+
+    @Override
+    public void onDismiss() { //다이얼로그 닫혔을 때
+        finish();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

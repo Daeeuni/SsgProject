@@ -23,6 +23,16 @@ public class SsacTipPagerAdapter extends PagerAdapter {
     private Context context;
     private ArrayList<SsacTip> items;
 
+    public interface OnItemClickListener {
+        void onItemClick(SsacTip item);
+    }
+
+    private OnItemClickListener mCallback;
+
+    public void setOnItemClickListener(OnItemClickListener callback) {
+        mCallback = callback;
+    }
+
     public SsacTipPagerAdapter(Context context) {
         this.context = context;
     }
@@ -36,7 +46,7 @@ public class SsacTipPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View itemView = inflater.inflate(R.layout.item_ssac_tip, container, false);
-        SsacTip tip = items.get(position);
+        final SsacTip tip = items.get(position);
         TextView tv_tip_subject = (TextView) itemView.findViewById(R.id.tv_tip_subject);
         TextView tv_tip_title = (TextView) itemView.findViewById(R.id.tv_tip_title);
         TextView tv_tip_subtitle = (TextView) itemView.findViewById(R.id.tv_tip_subtitle);
@@ -45,6 +55,15 @@ public class SsacTipPagerAdapter extends PagerAdapter {
         tv_tip_title.setText(tip.title);
         tv_tip_subtitle.setText(tip.subTitle);
         Glide.with(context).load(tip.thumbnail).into(iv_tip_thumbnail);
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mCallback != null) {
+                    mCallback.onItemClick(tip);
+                }
+            }
+        });
 
 
         ((ViewPager) container).addView(itemView);

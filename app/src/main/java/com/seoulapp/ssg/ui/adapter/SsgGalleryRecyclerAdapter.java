@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.SsgApiService;
+import com.seoulapp.ssg.managers.PropertyManager;
 import com.seoulapp.ssg.model.Ssg;
 import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.adapter.basic.BasicRecyclerAdapter;
@@ -117,7 +118,7 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
 
         private void requestSsgLike(final Ssg item) {
             SsgApiService service = ServiceGenerator.getInstance().createService(SsgApiService.class);
-            Call<Ssg> call = service.like(item.ssgId, 1);
+            Call<Ssg> call = service.like(item.ssgId, PropertyManager.getInstance().getUserId());
             call.enqueue(new Callback<Ssg>() {
                 @Override
                 public void onResponse(Call<Ssg> call, Response<Ssg> response) {
@@ -146,7 +147,7 @@ public class SsgGalleryRecyclerAdapter extends BasicRecyclerAdapter {
 
         private void requestSsgDeclare(final Ssg item) {
             SsgApiService service = ServiceGenerator.getInstance().createService(SsgApiService.class);
-            Call<Ssg> call = service.declare(item.ssgId, 1);
+            Call<Ssg> call = service.declare(item.ssgId, PropertyManager.getInstance().getUserId());
             call.enqueue(new Callback<Ssg>() {
                 @Override
                 public void onResponse(Call<Ssg> call, Response<Ssg> response) {

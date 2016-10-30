@@ -57,6 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14dp"
+            android:textColor="@android:color/white"
             tools:text="페인팅 제대로 하는 법"
             app:font="custom2"/>
 

@@ -1,5 +1,6 @@
 package com.seoulapp.ssg.ui.dialog;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,7 +20,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.seoulapp.ssg.R;
 import com.seoulapp.ssg.api.UserService;
-import com.seoulapp.ssg.model.Model;
+import com.seoulapp.ssg.managers.PropertyManager;
+import com.seoulapp.ssg.model.User;
 import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.activity.MainActivity;
 import com.seoulapp.ssg.util.Utils;
@@ -37,6 +39,16 @@ public class LoginDialog extends DialogFragment {
     String mName, mProfile, mEmail, mSocialId, mJoinType, mAccessToken;
     EditText editName, editEmail;
     Button btnLogin;
+
+    public interface OnDismissListener{
+        void onDismiss();
+    }
+
+    private OnDismissListener mCallback;
+
+    public void setOnDismissListener(OnDismissListener callback){
+        mCallback = callback;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,7 +100,7 @@ public class LoginDialog extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
-                if(s.length() > 0){
+                if (s.length() > 0) {
                     mName = s.toString();
                 }
             }
@@ -107,7 +119,7 @@ public class LoginDialog extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
-                if(s.length() > 0) {
+                if (s.length() > 0) {
                     mEmail = s.toString();
                 }
             }
@@ -124,8 +136,7 @@ public class LoginDialog extends DialogFragment {
         SignupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                LoginDialog.this.dismiss();
-              Log.d(TAG, "name : " + mName +" email : " + mEmail + "socialid + "+ mSocialId);
+                Log.d(TAG, "name : " + mName + " email : " + mEmail + "socialid + " + mSocialId);
                 signIn();
             }
         });
@@ -137,27 +148,33 @@ public class LoginDialog extends DialogFragment {
     private void signIn() {
         UserService service = ServiceGenerator.getInstance().createService(UserService.class);
 
-        if(mName == null || TextUtils.isEmpty(mName) || mEmail == null || TextUtils.isEmpty(mEmail)) {
+        if (mName == null || TextUtils.isEmpty(mName) || mEmail == null || TextUtils.isEmpty(mEmail)) {
             Toast.makeText(getActivity(), "이름과 이메일은 필수 입력 사항입니다.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Call<Model> call = service.signUp(mSocialId, mEmail, mName, mProfile, mJoinType, mAccessToken);
-        call.enqueue(new Callback<Model>() {
+        Call<User> call = service.signUp(mSocialId, mEmail, mName, mProfile, mJoinType, mAccessToken);
+        call.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<Model> call, Response<Model> response) {
+            public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     if (response.body().getCode() == 200) { // 회원가입 성공 or 인증된 유저
+                        Log.e(TAG, "onResponse: success");
+                        User user = response.body();
+                        PropertyManager.getInstance().setUserId(String.valueOf(user.getUser_num()));
+                        PropertyManager.getInstance().setUserNickname(user.getNickname());
+                        PropertyManager.getInstance().setLoginFlag(true);
+                        PropertyManager.getInstance().setUserPhoto(mProfile);
+
                         redirectMainActivity();
                     }
                 } else {
-                    Log.d(TAG, "signIn: " + response.code());
-                    Log.d(TAG, "signIn:" + response.message());
+
                 }
             }
 
             @Override
-            public void onFailure(Call<Model> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.toString());
             }
         });
@@ -165,15 +182,18 @@ public class LoginDialog extends DialogFragment {
 
     private void redirectMainActivity() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
-        intent.putExtra("profile_picture", mProfile);
-        intent.putExtra("profile_name", mName);
         startActivity(intent);
         dismiss();
 
-
     }
 
-
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if(mCallback != null){
+            mCallback.onDismiss();
+        }
+    }
 }
 
 
