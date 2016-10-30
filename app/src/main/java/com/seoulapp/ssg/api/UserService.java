@@ -14,12 +14,12 @@ import retrofit2.http.POST;
 
 public interface UserService {
     @FormUrlEncoded
-    @POST("signUp")
-    Call<Model> signUp(@Field("email") String email, @Field("name") String name, @Field("profile") String profile, @Field("jointype") String joinType);
+    @POST("Login") // 회원가입
+    Call<Model> signUp(@Field("social_id") String socialId, @Field("email") String email,
+                       @Field("nickname") String nickname, @Field("profile") String profile,
+                       @Field("join_type") String join_type, @Field("access_token") String token);
 
-    @FormUrlEncoded
-    @POST("login")
-    Call<Model> login(@Field("email") String email);
+
 
     @FormUrlEncoded
     @POST("myProfile")

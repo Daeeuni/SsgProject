@@ -19,13 +19,7 @@
         tools:replace="android:icon,android:theme,android:label">
         <activity
             android:name=".ui.activity.MainActivity"
-            android:label="" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:label="" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -41,7 +35,11 @@
         <activity
             android:name=".ui.activity.LoginActivity"
             android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <meta-data

@@ -35,7 +35,11 @@ public class SsgApplication extends Application {
                 .addCustom5(Typekit.createFromAsset(this, "SeoulHangangL.otf"));
 
         KakaoSDK.init(new KakaoSDKAdapter());
+
+ 
     }
+
+
 
     public static Activity getCurrentActivity() {
         return currentActivity;
