@@ -6,7 +6,6 @@ package com.seoulapp.ssg.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.View;
@@ -85,7 +84,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     }
 
-    private void redirectMainActivity() {
+    private void redirectLoginDialog() {
         startActivity(new Intent(this, LoginDialog.class));
         finish();
     }
@@ -106,7 +105,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     if (result == ErrorCode.CLIENT_ERROR_CODE) {
                         finish();
                     } else {
-                        redirectMainActivity();
+                        redirectLoginDialog();
                     }
                 }
 
@@ -122,12 +121,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 @Override
                 public void onSuccess(UserProfile userProfile) {
-                    Log.e(TAG, "onSuccess: " + userProfile.toString());
                     Bundle bundle = new Bundle();
                     String mName = userProfile.getNickname();
                     String mProfile = userProfile.getThumbnailImagePath();
+                    String mKakaoId = String.valueOf(userProfile.getId());
+                    bundle.putString("socialId", mKakaoId);
                     bundle.putString("name", mName);
                     bundle.putString("profile", mProfile);
+                    bundle.putString("join_type", "K");
+
                     LoginDialog loginDialog = new LoginDialog();
                     loginDialog.setArguments(bundle);
                     loginDialog.show(getSupportFragmentManager(), null);
@@ -163,9 +165,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private FacebookCallback<LoginResult> mCallback = new FacebookCallback<LoginResult>() {
         @Override
-        public void onSuccess(LoginResult loginResult) {
+        public void onSuccess(final LoginResult loginResult) {
+
             Log.e(TAG, "onSuccess: accessToken = " + loginResult.getAccessToken().getToken());
-            final String profile = "https://graph.facebook.com/" + loginResult.getAccessToken().getUserId() + "/picture?type=normal";
+            final String mProfile = "https://graph.facebook.com/" + loginResult.getAccessToken().getUserId() + "/picture?type=normal";
 
             GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                 @Override
@@ -174,20 +177,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         //handle error
                         Log.e(TAG, "onCompleted: geError " + response.getError().toString());
                     } else {
-                        String email = object.optString("email");
-                        String id = object.optString("id");
-                        String name = object.optString("name");
-                        if (TextUtils.isEmpty(email)) {
+                        Bundle bundle = new Bundle();
+                        String mEmail = object.optString("email");
+                        String mFacebookid = object.optString("id");
+                        String mName = object.optString("name");
+                        String mToken = loginResult.getAccessToken().getToken();
+
+                        bundle.putString("socialId", mFacebookid);
+                        bundle.putString("profile", mProfile);
+                        bundle.putString("name", mName);
+                        bundle.putString("email",mEmail);
+                        bundle.putString("join_type", "F");
+                        bundle.putString("token", mToken);
+
+                        /*if (TextUtils.isEmpty(email)) {
                             email = "";
                         }
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString("name", name);
-                        bundle.putString("email", email);
-                        bundle.putString("profile", profile);
+*/
                         loginDialog = new LoginDialog();
                         loginDialog.setArguments(bundle);
-                        loginDialog.show(getSupportFragmentManager(), "login");
+                        loginDialog.show(getSupportFragmentManager(), null);
                     }
                 }
             });

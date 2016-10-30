@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,15 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.seoulapp.ssg.R;
+import com.seoulapp.ssg.api.UserService;
+import com.seoulapp.ssg.model.Model;
+import com.seoulapp.ssg.network.ServiceGenerator;
 import com.seoulapp.ssg.ui.activity.MainActivity;
 import com.seoulapp.ssg.util.Utils;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by win7-64 on 2016-10-15.
@@ -22,7 +30,7 @@ import com.seoulapp.ssg.util.Utils;
 public class LoginDialog extends DialogFragment {
     private static final String TAG = LoginDialog.class.getSimpleName();
 
-    String mName, mProfile, mEmail;
+    String mName, mProfile, mEmail, mSocialId, mJoinType, mAccessToken;
     EditText editName, editEmail;
     Button btnLogin;
 
@@ -32,9 +40,12 @@ public class LoginDialog extends DialogFragment {
         setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog);
         Bundle bundle = getArguments();
         if (bundle != null) {
+            mSocialId = bundle.getString("social_id");
             mName = bundle.getString("name");
             mProfile = bundle.getString("profile");
             mEmail = bundle.getString("email");
+            mJoinType = bundle.getString("join_type");
+            mAccessToken = bundle.getString("token");
         }
 
     }
@@ -72,19 +83,49 @@ public class LoginDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
                 LoginDialog.this.dismiss();
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                intent.putExtra("profile_picture", mProfile);
-                intent.putExtra("profile_name", mName);
-                startActivity(intent);
-
-
+//                Log.d(TAG, "sicialId : " + mSocialId +" mJoinType: " + mJoinType );
+                signIn();
             }
-
         });
-
 
         return v;
     }
+
+
+    private void signIn() {
+        UserService service = ServiceGenerator.getInstance().createService(UserService.class);
+
+        Call<Model> call = service.signUp(mSocialId, mEmail, mName, mProfile, mJoinType, mAccessToken);
+        call.enqueue(new Callback<Model>() {
+            @Override
+            public void onResponse(Call<Model> call, Response<Model> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getCode() == 200) { // 회원가입 성공 or 인증된 유저
+                        redirectMainActivity();
+                    }
+                } else {
+                    Log.d(TAG, "signIn: " + response.code());
+                    Log.d(TAG, "signIn:" + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Model> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.toString());
+            }
+        });
+    }
+
+    private void redirectMainActivity() {
+
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        intent.putExtra("profile_picture", mProfile);
+        intent.putExtra("profile_name", mName);
+        startActivity(intent);
+
+
+    }
+
 
 }
 
