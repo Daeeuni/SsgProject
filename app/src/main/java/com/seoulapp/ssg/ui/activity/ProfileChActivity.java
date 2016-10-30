@@ -102,7 +102,8 @@ public class ProfileChActivity extends BaseActivity implements View.OnClickListe
                 onCheckingEmail();
                 break;
             case R.id.btn_profile_ok:
-                intent = new Intent(ProfileChActivity.this, SsgSettingActivity.class);
+                this.finish();
+                intent = new Intent(ProfileChActivity.this, ProfileChActivity.class);
                 startActivity(intent);
                 //onChangedEmail();
                 break;
@@ -129,10 +130,12 @@ public class ProfileChActivity extends BaseActivity implements View.OnClickListe
                         View view = getLayoutInflater().inflate(R.layout.dialog_profile_change, null);
                         TextView tv_profile_changed = (TextView) view.findViewById(R.id.tv_profile_changed);
                         Button btn_info_ok = (Button) view.findViewById(R.id.btn_profile_changed);
+
+                        tv_profile_changed.setText("인증번호가 확인되었습니다.");
+
                         dialog_info.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog_info.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         dialog_info.setContentView(view);
-                        tv_profile_changed.setText("인증번호가 확인되었습니다.");
                         btn_info_ok.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -148,10 +151,11 @@ public class ProfileChActivity extends BaseActivity implements View.OnClickListe
                         Button btn_info_ok = (Button) view.findViewById(R.id.btn_profile_changed);
 
                         tv_profile_changed.setText("인증번호를 다시 입력해주세요");
+
                         dialog_info.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog_info.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        dialog_info.setContentView(view);
 
+                        dialog_info.setContentView(view);
                         btn_info_ok.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -166,6 +170,7 @@ public class ProfileChActivity extends BaseActivity implements View.OnClickListe
                         Button btn_info_ok = (Button) view.findViewById(R.id.btn_profile_changed);
 
                         tv_profile_changed.setText("이메일 변경에 실패하였습니다");
+
                         dialog_info.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog_info.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         dialog_info.setContentView(view);
@@ -212,9 +217,11 @@ public class ProfileChActivity extends BaseActivity implements View.OnClickListe
                         View view = getLayoutInflater().inflate(R.layout.dialog_profile_change, null);
                         //TextView tv_profile_changed = (TextView) view.findViewById(R.id.tv_profile_changed);
                         Button btn_info_ok = (Button) view.findViewById(R.id.btn_profile_changed);
+
                         dialog_info.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog_info.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         dialog_info.setContentView(view);
+
                         btn_info_ok.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
