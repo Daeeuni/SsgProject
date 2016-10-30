@@ -22,11 +22,11 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.kakao.auth.AuthType;
 import com.kakao.auth.ErrorCode;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
-import com.kakao.usermgmt.LoginButton;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.MeResponseCallback;
 import com.kakao.usermgmt.response.model.UserProfile;
@@ -48,8 +48,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private ClickableSpan clickSpan, clickSpan2;
     private LoginDialog loginDialog;
     private CustomLoginButton btnFacebook, btnCustomKakaoLogin;
-    private LoginButton btnKakaoLogin;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,32 +59,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         LoginManager.getInstance().registerCallback(mCallbackManager, mCallback);
         setContentView(R.layout.activity_login);
 
-
-/*
-        TextView tvLinkify = (TextView) findViewById(R.id.tvLinkify);
-
-        String text = "회원가입을 함으로써 쓱싹의 이용약관 및 개인정보 취급방침에 동의합니다.";
-        tvLinkify.setText(text);
-
-        Linkify.TransformFilter mTransform = new Linkify.TransformFilter() {
-            @Override
-            public String transformUrl(Matcher match, String url) {
-                return "";
-            }
-        };
-        Pattern pattern1 = Pattern.compile("이용약관");
-
-        Linkify.addLinks(tvLinkify, pattern1, "http://naver.com", null, mTransform);
-*/
         btnFacebook = (CustomLoginButton) findViewById(R.id.btn_facebook_login);
-        btnKakaoLogin = (LoginButton) findViewById(R.id.com_kakao_login);
         btnFacebook.setOnClickListener(this);
         btnCustomKakaoLogin = (CustomLoginButton) findViewById(R.id.btn_kakao_login);
         btnCustomKakaoLogin.setOnClickListener(this);
 
         kakaoCallback = new SessionCallback();
         Session.getCurrentSession().addCallback(kakaoCallback);
-        Session.getCurrentSession().checkAndImplicitOpen();
         clickSpan = new ClickableSpan() {
 
             @Override
@@ -114,7 +93,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         agreement = (TextView) findViewById(R.id.tvLinkify);
         agreement.setMovementMethod(LinkMovementMethod.getInstance());
         agreement.setText(sp);
-
 
 
     }
@@ -189,7 +167,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 openFacebookSession();
                 break;
             case R.id.btn_kakao_login:
-                btnKakaoLogin.callOnClick();
+                Session.getCurrentSession().open(AuthType.KAKAO_TALK, this);
                 break;
         }
     }
@@ -221,7 +199,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         bundle.putString("social_id", mFacebookid);
                         bundle.putString("profile", mProfile);
                         bundle.putString("name", mName);
-                        bundle.putString("email",mEmail);
+                        bundle.putString("email", mEmail);
                         bundle.putString("join_type", "F");
                         bundle.putString("token", mToken);
 
@@ -267,6 +245,5 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     protected void onDestroy() {
         super.onDestroy();
         Session.getCurrentSession().removeCallback(kakaoCallback);
-
     }
 }

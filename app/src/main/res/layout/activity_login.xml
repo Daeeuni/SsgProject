@@ -27,12 +27,6 @@
         android:layout_marginRight="24dp"
         android:orientation="vertical">
 
-        <com.kakao.usermgmt.LoginButton
-            android:id="@+id/com_kakao_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
         <com.seoulapp.ssg.widget.CustomLoginButton
             android:id="@+id/btn_kakao_login"
             android:layout_width="match_parent"
