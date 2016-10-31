@@ -38,7 +38,6 @@ public class SsgApplication extends Application {
 
         KakaoSDK.init(new KakaoSDKAdapter());
 
- 
     }
 
 

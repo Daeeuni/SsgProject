@@ -15,6 +15,8 @@ import com.seoulapp.ssg.model.SsacTipContents;
 
 import java.util.ArrayList;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
+
 /**
  * Created by Dongyoon on 2016. 10. 31..
  */
@@ -44,9 +46,11 @@ public class SsacTipDetailPagerAdapter extends PagerAdapter {
         View itemView = inflater.inflate(R.layout.item_ssac_tip_detail, container, false);
         SsacTipContents tip = items.get(position);
         TextView tv_tip_contents = (TextView) itemView.findViewById(R.id.tv_tip_contents);
+        ImageView iv_background = (ImageView) itemView.findViewById(R.id.ivBackgroud);
         ImageView iv_tip = (ImageView) itemView.findViewById(R.id.iv_tip);
         tv_tip_contents.setText(tip.contents);
         Glide.with(mContext).load(tip.contents_img).fitCenter().into(iv_tip);
+        Glide.with(mContext).load(tip.contents_img).bitmapTransform(new BlurTransformation(mContext, 25)).into(iv_background);
 
 
         ((ViewPager) container).addView(itemView);

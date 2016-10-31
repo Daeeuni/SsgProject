@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    
-    <include layout="@layout/toolbar"/>
+
+    <include layout="@layout/toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -16,13 +16,21 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/pager_volunteer"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.45" />
+                android:layout_weight="0.45">
 
-            <include layout="@layout/volunteer_content"></include>
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/pager_volunteer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+
+            </FrameLayout>
+
+            <include layout="@layout/volunteer_content" />
 
             <Button
                 android:id="@+id/btn_volunteer_join"
